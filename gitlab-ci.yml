@@ -1,0 +1,45 @@
+stages:
+  - build
+  - release
+  - deploy
+
+variables:
+  HUB_URL: "hub.036.fr/rosalie/core"
+  TEST_TAG: "testing"
+  PROD_TAG: "production"
+  TAG: "latest"
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN hub.036.fr
+
+build:
+  stage: build
+  script:
+    - docker build --pull -t $HUB_URL:$TEST_TAG .
+    - docker push $HUB_URL:$TEST_TAG
+  only:
+    - master
+    - develop
+
+release:
+  stage: release
+  script:
+    - docker pull $HUB_URL:$TEST_TAG
+    - docker tag $HUB_URL:$TEST_TAG $HUB_URL:$PROD_TAG
+    - docker push $HUB_URL:$PROD_TAG
+  only:
+    - master
+  when: on_success
+
+
+deploy:
+  stage: deploy
+  tags:
+    - deploy
+  script:
+    - docker-compose -f docker-compose.yml pull rosalie
+    - docker-compose -f docker-compose.yml up -d --force-recreate rosalie
+  only:
+    - master
+  when: on_success
+  allow_failure: false

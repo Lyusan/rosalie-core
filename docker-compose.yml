@@ -1,0 +1,16 @@
+version: "3"
+services:
+  rosalie:
+    image: $HUB_URL:$PROD_TAG
+    restart: always
+    networks:
+      - web
+    environment:
+      - VIRTUAL_HOST=rosalie.036.fr
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=rosalie.036.fr
+      - LETSENCRYPT_EMAIL=sushifu@gmx.fr
+
+networks:
+  web:
+    external: true
