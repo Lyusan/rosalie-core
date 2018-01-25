@@ -15,6 +15,7 @@ before_script:
 build:
   stage: build
   script:
+    - docker run --rm -v "$PWD":/usr/src/rosalie -w /usr/src/rosalie golang:1.8 go build -v
     - docker build --pull -t $HUB_URL:$TEST_TAG .
     - docker push $HUB_URL:$TEST_TAG
   only:
