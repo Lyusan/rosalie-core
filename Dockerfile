@@ -1,8 +1,7 @@
-FROM golang:latest
+FROM scratch
 
-RUN go-wrapper download
-RUN go-wrapper install
+ADD rosalie rosalie
 
 EXPOSE 8080
 
-CMD ["go-wrapper", "run"]
+CMD ["rosalie"]
