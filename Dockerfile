@@ -1,7 +1,11 @@
-FROM scratch
+FROM golang:latest
 
-ADD rosalie rosalie
-
+RUN mkdir -p /go/src/app
+WORKDIR /go/src/app
 EXPOSE 8080
 
-CMD ["rosalie"]
+CMD ["go-wrapper", "run"]
+
+ONBUILD COPY . /go/src/app
+ONBUILD RUN go-wrapper download
+ONBUILD RUN go-wrapper install
