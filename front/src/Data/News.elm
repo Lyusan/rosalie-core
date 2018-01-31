@@ -38,3 +38,8 @@ decoder =
         |> required "pub_date" Decode.string
         |> required "summary" Decode.string
         |> required "content" Decode.string
+
+
+feedDecoder : Decoder (List News)
+feedDecoder =
+    Decode.list decoder
