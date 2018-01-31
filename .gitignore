@@ -1,8 +1,10 @@
-elm-stuff
 node_modules
-elm.js
 npm-debug.log
 yarn-error.log
+elm.js
+elm-stuff
+repl-temp-*
+build/
 dist
 rosalie.exe
 rosalie
