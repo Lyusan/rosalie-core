@@ -6,6 +6,6 @@ EXPOSE 8080
 
 CMD ["go-wrapper", "run"]
 
-ONBUILD COPY . /go/src/app
 ONBUILD RUN go-wrapper download
 ONBUILD RUN go-wrapper install
+ONBUILD COPY . /go/src/app
