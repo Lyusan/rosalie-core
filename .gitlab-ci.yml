@@ -29,6 +29,9 @@ build:
 
 release:
   stage: release
+  # should not be needed, but let's test
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN hub.036.fr
   script:
     - docker build --pull -t $HUB_URL:$TEST_TAG .
     - docker push $HUB_URL:$TEST_TAG
