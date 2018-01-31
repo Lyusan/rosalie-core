@@ -1,5 +1,7 @@
 module Main exposing (..)
 
+import Data.News exposing (NewsId)
+import Util exposing ((=>))
 import Route exposing (parseLocation)
 import Navigation exposing (Location)
 import Html exposing (Html, text, div, h1, img)
@@ -11,7 +13,7 @@ import Html.Attributes exposing (src)
 
 type Page
     = NewsFeed
-    | News
+    | News NewsId
 
 
 type alias Model =
@@ -21,7 +23,7 @@ type alias Model =
 
 init : Location -> ( Model, Cmd Msg )
 init location =
-    ( Model (locationPage location), Cmd.none )
+    Model (locationPage location) => Cmd.none
 
 
 locationPage : Location -> Page
@@ -30,8 +32,8 @@ locationPage location =
         Route.NewsFeed ->
             NewsFeed
 
-        Route.News ->
-            News
+        Route.News nid ->
+            News nid
 
         Route.NotFound ->
             NewsFeed
