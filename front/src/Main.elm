@@ -1,5 +1,7 @@
 module Main exposing (..)
 
+import Route exposing (parseLocation)
+import Navigation exposing (Location)
 import Html exposing (Html, text, div, h1, img)
 import Html.Attributes exposing (src)
 
@@ -7,13 +9,32 @@ import Html.Attributes exposing (src)
 ---- MODEL ----
 
 
+type Page
+    = NewsFeed
+    | News
+
+
 type alias Model =
-    {}
+    { page : Page
+    }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( {}, Cmd.none )
+init : Location -> ( Model, Cmd Msg )
+init location =
+    ( Model (locationPage location), Cmd.none )
+
+
+locationPage : Location -> Page
+locationPage location =
+    case (parseLocation location) of
+        Route.NewsFeed ->
+            NewsFeed
+
+        Route.News ->
+            News
+
+        Route.NotFound ->
+            NewsFeed
 
 
 
@@ -21,7 +42,7 @@ init =
 
 
 type Msg
-    = NoOp
+    = LocationChange Location
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -47,7 +68,7 @@ view model =
 
 main : Program Never Model Msg
 main =
-    Html.program
+    Navigation.program LocationChange
         { view = view
         , init = init
         , update = update
