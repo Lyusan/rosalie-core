@@ -16,14 +16,15 @@ build:
   image: golang:1.9
   stage: build
   before_script:
-    - echo 'No docker required'
+    - ''
   script:
-    - go get -v -d
-    - go build -v rosalie.go
+    - make get
+    - make rosalie-static
   only:
     - master
     - develop
   artifacts:
+    name: rosalie-linux-standalone
     paths:
     - rosalie
 
@@ -32,7 +33,6 @@ release:
   script:
     - docker build --pull -t $HUB_URL:$TEST_TAG .
     - docker push $HUB_URL:$TEST_TAG
-    - docker pull $HUB_URL:$TEST_TAG
     - docker tag $HUB_URL:$TEST_TAG $HUB_URL:$PROD_TAG
     - docker push $HUB_URL:$PROD_TAG
   only:
