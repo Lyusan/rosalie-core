@@ -147,7 +147,7 @@ func createSchema(db *pg.DB) error {
 	return nil
 }
 func main() {
-	ExampleDB_Model()
+	//ExampleDB_Model()
 	router := gin.Default()
 	v1 := router.Group("/v1")
 	{
