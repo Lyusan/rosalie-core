@@ -43,7 +43,7 @@ type Categorie struct {
 }
 
 func (c Categorie) String() string {
-	return fmt.Sprintf("Award<%d %d %d>", c.ID, c.Name, c.Description)
+	return fmt.Sprintf("Award<%d %s %s>", c.ID, c.Name, c.Description)
 }
 
 func ExampleDB_Model() {
