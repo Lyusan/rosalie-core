@@ -1,5 +1,6 @@
 module Main exposing (..)
 
+import Page.News.Feed as Feed
 import Data.News exposing (NewsId)
 import Util exposing ((=>))
 import Route exposing (parseLocation)
@@ -12,7 +13,7 @@ import Html.Attributes exposing (src)
 
 
 type Page
-    = NewsFeed
+    = NewsFeed Feed.Model
     | News NewsId
 
 
@@ -28,15 +29,33 @@ init location =
 
 locationPage : Location -> Page
 locationPage location =
-    case (parseLocation location) of
-        Route.NewsFeed ->
-            NewsFeed
+    let
+        route =
+            parseLocation location
+    in
+        case route of
+            Route.NewsFeed ->
+                NewsFeed (Tuple.first Feed.init)
 
-        Route.News nid ->
-            News nid
+            Route.News nid ->
+                News nid
 
-        Route.NotFound ->
-            NewsFeed
+            Route.NotFound ->
+                NewsFeed (Tuple.first Feed.init)
+
+
+locationMsg : Location -> Cmd Msg
+locationMsg location =
+    let
+        route =
+            parseLocation location
+    in
+        case route of
+            Route.NewsFeed ->
+                Cmd.map NewsFeedMsg (Tuple.second Feed.init)
+
+            _ ->
+                Cmd.none
 
 
 
@@ -45,6 +64,7 @@ locationPage location =
 
 type Msg
     = LocationChange Location
+    | NewsFeedMsg Feed.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
