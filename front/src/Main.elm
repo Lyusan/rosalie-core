@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Page.News.Feed as Feed
-import Data.News exposing (NewsId)
+import Page.News.Read as Read
 import Util exposing ((=>))
 import Route exposing (parseLocation)
 import Navigation exposing (Location)
@@ -14,7 +14,7 @@ import Html.Attributes exposing (src)
 
 type Page
     = NewsFeed Feed.Model
-    | News NewsId
+    | News Read.Model
 
 
 type alias Model =
@@ -38,7 +38,7 @@ locationPage location =
                 NewsFeed (Tuple.first Feed.init)
 
             Route.News nid ->
-                News nid
+                News (Tuple.first (Read.init nid))
 
             Route.NotFound ->
                 NewsFeed (Tuple.first Feed.init)
@@ -54,6 +54,9 @@ locationMsg location =
             Route.NewsFeed ->
                 Cmd.map NewsFeedMsg (Tuple.second Feed.init)
 
+            Route.News nid ->
+                Cmd.map NewsMsg (Tuple.second (Read.init nid))
+
             _ ->
                 Cmd.none
 
@@ -65,6 +68,7 @@ locationMsg location =
 type Msg
     = LocationChange Location
     | NewsFeedMsg Feed.Msg
+    | NewsMsg Read.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
