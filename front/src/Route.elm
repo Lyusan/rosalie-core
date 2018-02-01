@@ -1,6 +1,7 @@
 module Route exposing (Route(..), parseLocation, href)
 
 import Data.News exposing (NewsId, newsidParser, nidStr)
+import Data.Edition exposing (EditionId, eidParser, eidStr)
 import Navigation exposing (Location)
 import UrlParser exposing (Parser, (</>), s, map, oneOf, parseHash, top)
 import Html exposing (Attribute)
@@ -10,6 +11,8 @@ import Html.Attributes as Attr
 type Route
     = NewsFeed
     | News NewsId
+    | Editions
+    | Edition EditionId
     | Us
     | NotFound
 
@@ -20,6 +23,8 @@ parser =
         [ map NewsFeed (s "")
         , map News (s "news" </> newsidParser)
         , map Us (s "us")
+        , map Editions (s "editions")
+        , map Edition (s "editions" </> eidParser)
         ]
 
 
@@ -51,6 +56,12 @@ routeStr dest =
 
                 Us ->
                     [ "us" ]
+
+                Editions ->
+                    [ "editions" ]
+
+                Edition eid ->
+                    [ "editions", eidStr eid ]
 
                 NotFound ->
                     []

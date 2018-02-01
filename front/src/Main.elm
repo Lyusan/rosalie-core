@@ -4,6 +4,8 @@ import Page.Wrap exposing (wrap)
 import Page.Us exposing (us)
 import Page.News.Feed as Feed
 import Page.News.Read as Read
+import Page.Edition.List as EditionL
+import Page.Edition.Retrieve as EditionR
 import Util exposing ((=>))
 import Route exposing (Route, parseLocation)
 import Navigation exposing (Location)
@@ -18,6 +20,8 @@ type Page
     = NewsFeed Feed.Model
     | News Read.Model
     | Us
+    | EditionList EditionL.Model
+    | Edition EditionR.Model
     | NotFound
 
 
@@ -44,6 +48,12 @@ locationPage location =
             Route.News nid ->
                 News (Tuple.first (Read.init nid))
 
+            Route.Editions ->
+                EditionList (Tuple.first EditionL.init)
+
+            Route.Edition eid ->
+                Edition (Tuple.first (EditionR.init eid))
+
             Route.Us ->
                 Us
 
@@ -64,6 +74,12 @@ locationMsg location =
             Route.News nid ->
                 Cmd.map NewsMsg (Tuple.second (Read.init nid))
 
+            Route.Editions ->
+                Cmd.map EditionListMsg (Tuple.second EditionL.init)
+
+            Route.Edition eid ->
+                Cmd.map EditionMsg (Tuple.second (EditionR.init eid))
+
             _ ->
                 Cmd.none
 
@@ -76,6 +92,8 @@ type Msg
     = LocationChange Location
     | NewsFeedMsg Feed.Msg
     | NewsMsg Read.Msg
+    | EditionListMsg EditionL.Msg
+    | EditionMsg EditionR.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -84,6 +102,19 @@ update msg model =
         LocationChange location ->
             Model (locationPage location) => locationMsg location
 
+        {--
+        NewsFeedMsg subMsg ->
+            updatePage model.page msg model
+
+        NewsMsg subMsg ->
+            updatePage model.page msg model
+
+        EditionListMsg subMsg ->
+            updatePage model.page msg model
+
+        EditionMsg subMsg ->
+            updatePage model.page msg model
+            --}
         _ ->
             updatePage model.page msg model
 
@@ -105,6 +136,12 @@ updatePage page msg model =
             ( News subModel, NewsMsg subMsg ) ->
                 toPage Read.update subMsg subModel News NewsMsg
 
+            ( EditionList subModel, EditionListMsg subMsg ) ->
+                toPage EditionL.update subMsg subModel EditionList EditionListMsg
+
+            ( Edition subModel, EditionMsg subMsg ) ->
+                toPage EditionR.update subMsg subModel Edition EditionMsg
+
             ( _, _ ) ->
                 model => Cmd.none
 
@@ -123,6 +160,14 @@ view model =
         News model ->
             wrap (Read.view model)
                 |> Html.map NewsMsg
+
+        EditionList model ->
+            wrap (EditionL.view model)
+                |> Html.map EditionListMsg
+
+        Edition model ->
+            wrap (EditionR.view model)
+                |> Html.map EditionMsg
 
         Us ->
             wrap us
