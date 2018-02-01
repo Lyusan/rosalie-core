@@ -24,7 +24,7 @@ type alias Model =
 
 init : Location -> ( Model, Cmd Msg )
 init location =
-    Model (locationPage location) => Cmd.none
+    Model (locationPage location) => (locationMsg location)
 
 
 locationPage : Location -> Page
