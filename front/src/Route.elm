@@ -2,8 +2,8 @@ module Route exposing (Route(..), parseLocation, href)
 
 import Data.News exposing (NewsId, newsidParser, nidStr)
 import Navigation exposing (Location)
-import UrlParser exposing (Parser, (</>), s, map, oneOf, parseHash)
-import Html exposing (Html, Attribute, a, text)
+import UrlParser exposing (Parser, (</>), s, map, oneOf, parseHash, top)
+import Html exposing (Attribute)
 import Html.Attributes as Attr
 
 
@@ -13,22 +13,26 @@ type Route
     | NotFound
 
 
-route : Parser (Route -> a) a
-route =
+parser : Parser (Route -> a) a
+parser =
     oneOf
         [ map NewsFeed (s "")
-        , map News (s "" </> newsidParser)
+        , map News (s "news" </> newsidParser)
         ]
 
 
 parseLocation : Location -> Route
 parseLocation location =
-    case (parseHash route location) of
-        Just route ->
-            route
+    let
+        maybe =
+            parseHash parser location
+    in
+        case maybe of
+            Just route ->
+                route
 
-        Nothing ->
-            NotFound
+            Nothing ->
+                NotFound
 
 
 href : Route -> Attribute msg
@@ -45,7 +49,7 @@ routeStr dest =
                     []
 
                 News nid ->
-                    [ nidStr nid ]
+                    [ "news", nidStr nid ]
 
                 _ ->
                     []

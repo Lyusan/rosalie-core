@@ -7,12 +7,12 @@ import Request.Api exposing (apiUrl)
 
 feedUrl : String
 feedUrl =
-    apiUrl ++ "/v1/news"
+    apiUrl ++ "/news"
 
 
 newsUrl : NewsId -> String
 newsUrl nid =
-    feedUrl ++ (nidStr nid)
+    feedUrl ++ "/" ++ (nidStr nid)
 
 
 listNews : Http.Request (List News)

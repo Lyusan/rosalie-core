@@ -9,7 +9,9 @@ wrap : Html msg -> Html msg
 wrap content =
     div [ class "page-wrap" ]
         [ viewHeader
+        , hr [] []
         , content
+        , hr [] []
         , viewFooter
         ]
 

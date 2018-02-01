@@ -1,5 +1,6 @@
 module View.News exposing (..)
 
+import Route
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Data.News exposing (..)
@@ -28,4 +29,5 @@ row news =
         , p [ class "news-author" ] [ text ("Par " ++ news.author) ]
         , p [ class "news-pub" ] [ text ("le " ++ news.pub) ]
         , p [ class "news-summary" ] [ text news.summary ]
+        , a [ Route.href (Route.News news.id) ] [ text "Read more ..." ]
         ]
