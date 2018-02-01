@@ -35,12 +35,17 @@ type alias Link =
 
 hrefLink : Link -> Html msg
 hrefLink link =
-    a [ Route.href link.dest ] [ text link.label ]
+    div [ class "navdiv" ]
+        [ a [ class "navref", Route.href link.dest ]
+            [ text link.label ]
+        ]
 
 
 navLinks : List Link
 navLinks =
-    [ Link Route.NewsFeed "Actualités" ]
+    [ Link Route.NewsFeed "Actualités"
+    , Link Route.Us "Qui sommes-nous ?"
+    ]
 
 
 viewFooter : Html msg

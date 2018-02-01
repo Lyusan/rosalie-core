@@ -10,6 +10,7 @@ import Html.Attributes as Attr
 type Route
     = NewsFeed
     | News NewsId
+    | Us
     | NotFound
 
 
@@ -18,21 +19,18 @@ parser =
     oneOf
         [ map NewsFeed (s "")
         , map News (s "news" </> newsidParser)
+        , map Us (s "us")
         ]
 
 
 parseLocation : Location -> Route
 parseLocation location =
-    let
-        maybe =
-            parseHash parser location
-    in
-        case maybe of
-            Just route ->
-                route
+    case (parseHash parser location) of
+        Just route ->
+            route
 
-            Nothing ->
-                NotFound
+        Nothing ->
+            NotFound
 
 
 href : Route -> Attribute msg
@@ -51,7 +49,10 @@ routeStr dest =
                 News nid ->
                     [ "news", nidStr nid ]
 
-                _ ->
+                Us ->
+                    [ "us" ]
+
+                NotFound ->
                     []
     in
         "#/" ++ String.join "/" path

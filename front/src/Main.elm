@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Page.Wrap exposing (wrap)
+import Page.Us exposing (us)
 import Page.News.Feed as Feed
 import Page.News.Read as Read
 import Util exposing ((=>))
@@ -16,6 +17,7 @@ import Html.Attributes exposing (src, class)
 type Page
     = NewsFeed Feed.Model
     | News Read.Model
+    | Us
     | NotFound
 
 
@@ -41,6 +43,9 @@ locationPage location =
 
             Route.News nid ->
                 News (Tuple.first (Read.init nid))
+
+            Route.Us ->
+                Us
 
             Route.NotFound ->
                 NotFound
@@ -118,6 +123,9 @@ view model =
         News model ->
             wrap (Read.view model)
                 |> Html.map NewsMsg
+
+        Us ->
+            wrap us
 
         NotFound ->
             wrap (div [ class "page404" ] [ text "404 Not Found" ])
