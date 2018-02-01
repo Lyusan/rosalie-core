@@ -1,9 +1,10 @@
 module Main exposing (..)
 
+import Page.Wrap exposing (wrap)
 import Page.News.Feed as Feed
 import Page.News.Read as Read
 import Util exposing ((=>))
-import Route exposing (parseLocation)
+import Route exposing (Route, parseLocation)
 import Navigation exposing (Location)
 import Html exposing (Html, text, div, h1, img)
 import Html.Attributes exposing (src)
@@ -82,10 +83,14 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ img [ src "/logo.svg" ] []
-        , h1 [] [ text "Your Elm App is working!" ]
-        ]
+    case model.page of
+        NewsFeed model ->
+            wrap (Feed.view model)
+                |> Html.map NewsFeedMsg
+
+        News model ->
+            wrap (Read.view model)
+                |> Html.map NewsMsg
 
 
 

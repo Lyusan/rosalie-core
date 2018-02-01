@@ -1,4 +1,4 @@
-module Route exposing (Route, parseLocation, href)
+module Route exposing (Route(..), parseLocation, href)
 
 import Data.News exposing (NewsId, newsidParser, nidStr)
 import Navigation exposing (Location)
