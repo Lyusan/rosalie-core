@@ -7,7 +7,7 @@ import Util exposing ((=>))
 import Route exposing (Route, parseLocation)
 import Navigation exposing (Location)
 import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src)
+import Html.Attributes exposing (src, class)
 
 
 ---- MODEL ----
@@ -16,6 +16,7 @@ import Html.Attributes exposing (src)
 type Page
     = NewsFeed Feed.Model
     | News Read.Model
+    | NotFound
 
 
 type alias Model =
@@ -42,7 +43,7 @@ locationPage location =
                 News (Tuple.first (Read.init nid))
 
             Route.NotFound ->
-                NewsFeed (Tuple.first Feed.init)
+                NotFound
 
 
 locationMsg : Location -> Cmd Msg
@@ -74,7 +75,33 @@ type Msg
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        LocationChange location ->
+            Model (locationPage location) => locationMsg location
+
+        _ ->
+            updatePage model.page msg model
+
+
+updatePage : Page -> Msg -> Model -> ( Model, Cmd Msg )
+updatePage page msg model =
+    let
+        toPage toUpdate subMsg subModel toModel toMsg =
+            let
+                ( newModel, newCmd ) =
+                    toUpdate subMsg subModel
+            in
+                { model | page = toModel newModel } => Cmd.map toMsg newCmd
+    in
+        case ( page, msg ) of
+            ( NewsFeed subModel, NewsFeedMsg subMsg ) ->
+                toPage Feed.update subMsg subModel NewsFeed NewsFeedMsg
+
+            ( News subModel, NewsMsg subMsg ) ->
+                toPage Read.update subMsg subModel News NewsMsg
+
+            ( _, _ ) ->
+                model => Cmd.none
 
 
 
@@ -91,6 +118,9 @@ view model =
         News model ->
             wrap (Read.view model)
                 |> Html.map NewsMsg
+
+        NotFound ->
+            wrap (div [ class "page404" ] [ text "404 Not Found" ])
 
 
 
