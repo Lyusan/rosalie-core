@@ -1,8 +1,8 @@
 module Data.News exposing (..)
 
-import UrlParser
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
+import UrlParser
 
 
 type alias News =
@@ -16,23 +16,38 @@ type alias News =
 
 
 type NewsId
-    = NewsId String
+    = NewsId Int
+
+
+nidInt : NewsId -> Int
+nidInt (NewsId nid) =
+    nid
 
 
 nidStr : NewsId -> String
 nidStr (NewsId nid) =
-    nid
+    toString nid
+
+
+strNid : String -> Result String NewsId
+strNid str =
+    case String.toInt str of
+        Ok i ->
+            Ok (NewsId i)
+
+        Err err ->
+            Err err
 
 
 newsidParser : UrlParser.Parser (NewsId -> a) a
 newsidParser =
-    UrlParser.custom "NEWSID" (Ok << NewsId)
+    UrlParser.custom "NEWSID" strNid
 
 
 decoder : Decoder News
 decoder =
     decode News
-        |> required "id" (Decode.map NewsId Decode.string)
+        |> required "id" (Decode.map NewsId Decode.int)
         |> required "title" Decode.string
         |> required "author" Decode.string
         |> required "pub_date" Decode.string

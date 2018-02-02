@@ -1,8 +1,8 @@
 module Data.Edition exposing (..)
 
-import UrlParser
 import Json.Decode as Decode exposing (Decoder)
-import Json.Decode.Pipeline exposing (required, decode)
+import Json.Decode.Pipeline exposing (decode, required)
+import UrlParser
 
 
 type alias Edition =
@@ -19,23 +19,38 @@ type alias Edition =
 
 
 type EditionId
-    = EditionId String
+    = EditionId Int
+
+
+eidInt : EditionId -> Int
+eidInt (EditionId eid) =
+    eid
 
 
 eidStr : EditionId -> String
 eidStr (EditionId eid) =
-    eid
+    toString eid
+
+
+strEid : String -> Result String EditionId
+strEid str =
+    case String.toInt str of
+        Ok i ->
+            Ok (EditionId i)
+
+        Err err ->
+            Err err
 
 
 eidParser : UrlParser.Parser (EditionId -> a) a
 eidParser =
-    UrlParser.custom "EDITIONID" (Ok << EditionId)
+    UrlParser.custom "EDITIONID" strEid
 
 
 decoder : Decoder Edition
 decoder =
     decode Edition
-        |> required "id" (Decode.map EditionId Decode.string)
+        |> required "id" (Decode.map EditionId Decode.int)
         |> required "name" Decode.string
         |> required "localisation" Decode.string
         |> required "start_date" Decode.string

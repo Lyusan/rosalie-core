@@ -1,16 +1,16 @@
 module Main exposing (..)
 
-import Page.Wrap exposing (wrap)
-import Page.Us exposing (us)
-import Page.News.Feed as Feed
-import Page.News.Read as Read
+import Html exposing (Html, div, h1, img, text)
+import Html.Attributes exposing (class, src)
+import Navigation exposing (Location)
 import Page.Edition.List as EditionL
 import Page.Edition.Retrieve as EditionR
-import Util exposing ((=>))
+import Page.News.Feed as Feed
+import Page.News.Read as Read
+import Page.Us exposing (us)
+import Page.Wrap exposing (wrap)
 import Route exposing (Route, parseLocation)
-import Navigation exposing (Location)
-import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src, class)
+import Util exposing ((=>))
 
 
 ---- MODEL ----
@@ -27,12 +27,13 @@ type Page
 
 type alias Model =
     { page : Page
+    , location : Location
     }
 
 
 init : Location -> ( Model, Cmd Msg )
 init location =
-    Model (locationPage location) => (locationMsg location)
+    Model (locationPage location) location => locationMsg location
 
 
 locationPage : Location -> Page
@@ -41,24 +42,24 @@ locationPage location =
         route =
             parseLocation location
     in
-        case route of
-            Route.NewsFeed ->
-                NewsFeed (Tuple.first Feed.init)
+    case route of
+        Route.NewsFeed ->
+            NewsFeed (Tuple.first Feed.init)
 
-            Route.News nid ->
-                News (Tuple.first (Read.init nid))
+        Route.News nid ->
+            News (Tuple.first (Read.init nid))
 
-            Route.Editions ->
-                EditionList (Tuple.first EditionL.init)
+        Route.Editions ->
+            EditionList (Tuple.first EditionL.init)
 
-            Route.Edition eid ->
-                Edition (Tuple.first (EditionR.init eid))
+        Route.Edition eid ->
+            Edition (Tuple.first (EditionR.init eid))
 
-            Route.Us ->
-                Us
+        Route.Us ->
+            Us
 
-            Route.NotFound ->
-                NotFound
+        Route.NotFound ->
+            NotFound
 
 
 locationMsg : Location -> Cmd Msg
@@ -67,21 +68,21 @@ locationMsg location =
         route =
             parseLocation location
     in
-        case route of
-            Route.NewsFeed ->
-                Cmd.map NewsFeedMsg (Tuple.second Feed.init)
+    case route of
+        Route.NewsFeed ->
+            Cmd.map NewsFeedMsg (Tuple.second Feed.init)
 
-            Route.News nid ->
-                Cmd.map NewsMsg (Tuple.second (Read.init nid))
+        Route.News nid ->
+            Cmd.map NewsMsg (Tuple.second (Read.init nid))
 
-            Route.Editions ->
-                Cmd.map EditionListMsg (Tuple.second EditionL.init)
+        Route.Editions ->
+            Cmd.map EditionListMsg (Tuple.second EditionL.init)
 
-            Route.Edition eid ->
-                Cmd.map EditionMsg (Tuple.second (EditionR.init eid))
+        Route.Edition eid ->
+            Cmd.map EditionMsg (Tuple.second (EditionR.init eid))
 
-            _ ->
-                Cmd.none
+        _ ->
+            Cmd.none
 
 
 
@@ -100,7 +101,8 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         LocationChange location ->
-            Model (locationPage location) => locationMsg location
+            { model | page = locationPage location, location = location }
+                => locationMsg location
 
         {--
         NewsFeedMsg subMsg ->
@@ -127,23 +129,23 @@ updatePage page msg model =
                 ( newModel, newCmd ) =
                     toUpdate subMsg subModel
             in
-                { model | page = toModel newModel } => Cmd.map toMsg newCmd
+            { model | page = toModel newModel } => Cmd.map toMsg newCmd
     in
-        case ( page, msg ) of
-            ( NewsFeed subModel, NewsFeedMsg subMsg ) ->
-                toPage Feed.update subMsg subModel NewsFeed NewsFeedMsg
+    case ( page, msg ) of
+        ( NewsFeed subModel, NewsFeedMsg subMsg ) ->
+            toPage Feed.update subMsg subModel NewsFeed NewsFeedMsg
 
-            ( News subModel, NewsMsg subMsg ) ->
-                toPage Read.update subMsg subModel News NewsMsg
+        ( News subModel, NewsMsg subMsg ) ->
+            toPage Read.update subMsg subModel News NewsMsg
 
-            ( EditionList subModel, EditionListMsg subMsg ) ->
-                toPage EditionL.update subMsg subModel EditionList EditionListMsg
+        ( EditionList subModel, EditionListMsg subMsg ) ->
+            toPage EditionL.update subMsg subModel EditionList EditionListMsg
 
-            ( Edition subModel, EditionMsg subMsg ) ->
-                toPage EditionR.update subMsg subModel Edition EditionMsg
+        ( Edition subModel, EditionMsg subMsg ) ->
+            toPage EditionR.update subMsg subModel Edition EditionMsg
 
-            ( _, _ ) ->
-                model => Cmd.none
+        ( _, _ ) ->
+            model => Cmd.none
 
 
 

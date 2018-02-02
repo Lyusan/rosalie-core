@@ -1,11 +1,11 @@
-module Route exposing (Route(..), parseLocation, href)
+module Route exposing (Route(..), href, parseLocation)
 
-import Data.News exposing (NewsId, newsidParser, nidStr)
 import Data.Edition exposing (EditionId, eidParser, eidStr)
-import Navigation exposing (Location)
-import UrlParser exposing (Parser, (</>), s, map, oneOf, parseHash, top)
+import Data.News exposing (NewsId, newsidParser, nidStr)
 import Html exposing (Attribute)
 import Html.Attributes as Attr
+import Navigation exposing (Location)
+import UrlParser exposing ((</>), Parser, map, oneOf, parseHash, s, top)
 
 
 type Route
@@ -20,7 +20,8 @@ type Route
 parser : Parser (Route -> a) a
 parser =
     oneOf
-        [ map NewsFeed (s "")
+        [ map NewsFeed top
+        , map NewsFeed (s "")
         , map News (s "news" </> newsidParser)
         , map Us (s "us")
         , map Editions (s "editions")
@@ -30,7 +31,7 @@ parser =
 
 parseLocation : Location -> Route
 parseLocation location =
-    case (parseHash parser location) of
+    case parseHash parser location of
         Just route ->
             route
 
@@ -66,4 +67,4 @@ routeStr dest =
                 NotFound ->
                     []
     in
-        "#/" ++ String.join "/" path
+    "#/" ++ String.join "/" path
