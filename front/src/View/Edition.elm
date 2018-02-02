@@ -1,19 +1,32 @@
 module View.Edition exposing (..)
 
+import Data.Award exposing (Award)
+import Data.Edition exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Data.Edition exposing (..)
 import Route
 
 
-detail : Edition -> Html msg
-detail edition =
+detail : Edition -> Html msg -> Html msg
+detail edition awardsView =
     div [ class "edition-detail" ]
         [ h1 [] [ text edition.name ]
-        , h2 [] [ text "Les candidats" ]
-        , h2 [] [ text "Les nominés" ]
-        , h2 [] [ text "Récompensé" ]
+        , awardsView
         , button [] [ text "FixMe" ]
+        ]
+
+
+listAwards : List Award -> Html msg
+listAwards awards =
+    div [ class "edition-awards" ]
+        (List.map rowAward awards)
+
+
+rowAward : Award -> Html msg
+rowAward award =
+    div [ class "award-row" ]
+        [ a [ Route.href (Route.Award award.id) ]
+            [ text award.name ]
         ]
 
 

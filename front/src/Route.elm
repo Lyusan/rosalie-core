@@ -1,5 +1,6 @@
 module Route exposing (Route(..), href, parseLocation)
 
+import Data.Award exposing (AwardId, aidParser, aidStr)
 import Data.Edition exposing (EditionId, eidParser, eidStr)
 import Data.News exposing (NewsId, newsidParser, nidStr)
 import Html exposing (Attribute)
@@ -13,6 +14,7 @@ type Route
     | News NewsId
     | Editions
     | Edition EditionId
+    | Award AwardId
     | Us
     | NotFound
 
@@ -26,6 +28,7 @@ parser =
         , map Us (s "us")
         , map Editions (s "editions")
         , map Edition (s "editions" </> eidParser)
+        , map Award (s "awards" </> aidParser)
         ]
 
 
@@ -63,6 +66,9 @@ routeStr dest =
 
                 Edition eid ->
                     [ "editions", eidStr eid ]
+
+                Award aid ->
+                    [ "awards", aidStr aid ]
 
                 NotFound ->
                     []

@@ -3,6 +3,7 @@ module Main exposing (..)
 import Html exposing (Html, div, h1, img, text)
 import Html.Attributes exposing (class, src)
 import Navigation exposing (Location)
+import Page.Award.Retrieve as AwardR
 import Page.Edition.List as EditionL
 import Page.Edition.Retrieve as EditionR
 import Page.News.Feed as Feed
@@ -22,6 +23,7 @@ type Page
     | Us
     | EditionList EditionL.Model
     | Edition EditionR.Model
+    | Award AwardR.Model
     | NotFound
 
 
@@ -55,6 +57,9 @@ locationPage location =
         Route.Edition eid ->
             Edition (Tuple.first (EditionR.init eid))
 
+        Route.Award aid ->
+            Award (Tuple.first (AwardR.init aid))
+
         Route.Us ->
             Us
 
@@ -81,6 +86,9 @@ locationMsg location =
         Route.Edition eid ->
             Cmd.map EditionMsg (Tuple.second (EditionR.init eid))
 
+        Route.Award aid ->
+            Cmd.map AwardMsg (Tuple.second (AwardR.init aid))
+
         _ ->
             Cmd.none
 
@@ -95,6 +103,7 @@ type Msg
     | NewsMsg Read.Msg
     | EditionListMsg EditionL.Msg
     | EditionMsg EditionR.Msg
+    | AwardMsg AwardR.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -144,6 +153,9 @@ updatePage page msg model =
         ( Edition subModel, EditionMsg subMsg ) ->
             toPage EditionR.update subMsg subModel Edition EditionMsg
 
+        ( Award subModel, AwardMsg subMsg ) ->
+            toPage AwardR.update subMsg subModel Award AwardMsg
+
         ( _, _ ) ->
             model => Cmd.none
 
@@ -170,6 +182,10 @@ view model =
         Edition model ->
             wrap (EditionR.view model)
                 |> Html.map EditionMsg
+
+        Award model ->
+            wrap (AwardR.view model)
+                |> Html.map AwardMsg
 
         Us ->
             wrap us
