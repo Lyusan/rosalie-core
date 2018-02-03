@@ -1,8 +1,8 @@
 module Page.Award.Retrieve exposing (..)
 
 import Data.Award exposing (..)
+import Data.Application as App
 import Html exposing (..)
-import Html.Attributes exposing (..)
 import RemoteData exposing (WebData)
 import Request.Award as AwardR
 import Util exposing ((=>))
@@ -11,33 +11,22 @@ import View.Award exposing (..)
 
 type alias Model =
     { award : WebData Award
-    , winner : String
+    , winner : WebData App.App
     }
 
 
 init : AwardId -> ( Model, Cmd Msg )
 init aid =
-    Model RemoteData.Loading "" => retrieveAward aid
+    Model RemoteData.Loading RemoteData.Loading => retrieveAward aid
 
 
 view : Model -> Html Msg
 view model =
     let
-        awardView =
-            case model.award of
-                RemoteData.NotAsked ->
-                    text "afk"
-
-                RemoteData.Loading ->
-                    text "brb"
-
-                RemoteData.Failure err ->
-                    text (toString err)
-
-                RemoteData.Success award ->
-                    detail award
+        winnerView =
+            winner model.winner
     in
-    div [ class "award-page" ] [ awardView ]
+        detail model.award winnerView
 
 
 retrieveAward : AwardId -> Cmd Msg
@@ -47,12 +36,32 @@ retrieveAward aid =
         |> Cmd.map RetrieveAward
 
 
+retrieveWinner : AwardId -> Cmd Msg
+retrieveWinner aid =
+    AwardR.retrieveWinner aid
+        |> RemoteData.sendRequest
+        |> Cmd.map RetrieveWinner
+
+
 type Msg
     = RetrieveAward (WebData Award)
+    | RetrieveWinner (WebData App.App)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         RetrieveAward data ->
-            { model | award = data } => Cmd.none
+            let
+                cmd =
+                    case data of
+                        RemoteData.Success award ->
+                            retrieveWinner award.id
+
+                        _ ->
+                            Cmd.none
+            in
+                { model | award = data } => cmd
+
+        RetrieveWinner data ->
+            { model | winner = data } => Cmd.none
