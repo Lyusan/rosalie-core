@@ -15,6 +15,8 @@ type Route
     | Editions
     | Edition EditionId
     | Award AwardId
+    | Candidates AwardId
+    | Nominees AwardId
     | Us
     | NotFound
 
@@ -29,6 +31,8 @@ parser =
         , map Editions (s "editions")
         , map Edition (s "editions" </> eidParser)
         , map Award (s "awards" </> aidParser)
+        , map Candidates (s "candidates" </> aidParser)
+        , map Nominees (s "nominees" </> aidParser)
         ]
 
 
@@ -70,7 +74,13 @@ routeStr dest =
                 Award aid ->
                     [ "awards", aidStr aid ]
 
+                Candidates aid ->
+                    [ "candidates", aidStr aid ]
+
+                Nominees aid ->
+                    [ "nominees", aidStr aid ]
+
                 NotFound ->
                     []
     in
-    "#/" ++ String.join "/" path
+        "#/" ++ String.join "/" path

@@ -1,5 +1,6 @@
 module Main exposing (..)
 
+import Page.Application.Award as App
 import Html exposing (Html, div, h1, img, text)
 import Html.Attributes exposing (class, src)
 import Navigation exposing (Location)
@@ -24,6 +25,7 @@ type Page
     | EditionList EditionL.Model
     | Edition EditionR.Model
     | Award AwardR.Model
+    | AwardApps App.Model
     | NotFound
 
 
@@ -44,27 +46,33 @@ locationPage location =
         route =
             parseLocation location
     in
-    case route of
-        Route.NewsFeed ->
-            NewsFeed (Tuple.first Feed.init)
+        case route of
+            Route.NewsFeed ->
+                NewsFeed (Tuple.first Feed.init)
 
-        Route.News nid ->
-            News (Tuple.first (Read.init nid))
+            Route.News nid ->
+                News (Tuple.first (Read.init nid))
 
-        Route.Editions ->
-            EditionList (Tuple.first EditionL.init)
+            Route.Editions ->
+                EditionList (Tuple.first EditionL.init)
 
-        Route.Edition eid ->
-            Edition (Tuple.first (EditionR.init eid))
+            Route.Edition eid ->
+                Edition (Tuple.first (EditionR.init eid))
 
-        Route.Award aid ->
-            Award (Tuple.first (AwardR.init aid))
+            Route.Award aid ->
+                Award (Tuple.first (AwardR.init aid))
 
-        Route.Us ->
-            Us
+            Route.Candidates aid ->
+                AwardApps (Tuple.first (App.init aid False))
 
-        Route.NotFound ->
-            NotFound
+            Route.Nominees aid ->
+                AwardApps (Tuple.first (App.init aid True))
+
+            Route.Us ->
+                Us
+
+            Route.NotFound ->
+                NotFound
 
 
 locationMsg : Location -> Cmd Msg
@@ -73,24 +81,30 @@ locationMsg location =
         route =
             parseLocation location
     in
-    case route of
-        Route.NewsFeed ->
-            Cmd.map NewsFeedMsg (Tuple.second Feed.init)
+        case route of
+            Route.NewsFeed ->
+                Cmd.map NewsFeedMsg (Tuple.second Feed.init)
 
-        Route.News nid ->
-            Cmd.map NewsMsg (Tuple.second (Read.init nid))
+            Route.News nid ->
+                Cmd.map NewsMsg (Tuple.second (Read.init nid))
 
-        Route.Editions ->
-            Cmd.map EditionListMsg (Tuple.second EditionL.init)
+            Route.Editions ->
+                Cmd.map EditionListMsg (Tuple.second EditionL.init)
 
-        Route.Edition eid ->
-            Cmd.map EditionMsg (Tuple.second (EditionR.init eid))
+            Route.Edition eid ->
+                Cmd.map EditionMsg (Tuple.second (EditionR.init eid))
 
-        Route.Award aid ->
-            Cmd.map AwardMsg (Tuple.second (AwardR.init aid))
+            Route.Award aid ->
+                Cmd.map AwardMsg (Tuple.second (AwardR.init aid))
 
-        _ ->
-            Cmd.none
+            Route.Candidates aid ->
+                Cmd.map AwardAppsMsg (Tuple.second (App.init aid False))
+
+            Route.Nominees aid ->
+                Cmd.map AwardAppsMsg (Tuple.second (App.init aid True))
+
+            _ ->
+                Cmd.none
 
 
 
@@ -104,6 +118,7 @@ type Msg
     | EditionListMsg EditionL.Msg
     | EditionMsg EditionR.Msg
     | AwardMsg AwardR.Msg
+    | AwardAppsMsg App.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -114,18 +129,18 @@ update msg model =
                 => locationMsg location
 
         {--
-        NewsFeedMsg subMsg ->
-            updatePage model.page msg model
+    NewsFeedMsg subMsg ->
+      updatePage model.page msg model
 
-        NewsMsg subMsg ->
-            updatePage model.page msg model
+    NewsMsg subMsg ->
+      updatePage model.page msg model
 
-        EditionListMsg subMsg ->
-            updatePage model.page msg model
+    EditionListMsg subMsg ->
+      updatePage model.page msg model
 
-        EditionMsg subMsg ->
-            updatePage model.page msg model
-            --}
+    EditionMsg subMsg ->
+      updatePage model.page msg model
+      --}
         _ ->
             updatePage model.page msg model
 
@@ -138,26 +153,29 @@ updatePage page msg model =
                 ( newModel, newCmd ) =
                     toUpdate subMsg subModel
             in
-            { model | page = toModel newModel } => Cmd.map toMsg newCmd
+                { model | page = toModel newModel } => Cmd.map toMsg newCmd
     in
-    case ( page, msg ) of
-        ( NewsFeed subModel, NewsFeedMsg subMsg ) ->
-            toPage Feed.update subMsg subModel NewsFeed NewsFeedMsg
+        case ( page, msg ) of
+            ( NewsFeed subModel, NewsFeedMsg subMsg ) ->
+                toPage Feed.update subMsg subModel NewsFeed NewsFeedMsg
 
-        ( News subModel, NewsMsg subMsg ) ->
-            toPage Read.update subMsg subModel News NewsMsg
+            ( News subModel, NewsMsg subMsg ) ->
+                toPage Read.update subMsg subModel News NewsMsg
 
-        ( EditionList subModel, EditionListMsg subMsg ) ->
-            toPage EditionL.update subMsg subModel EditionList EditionListMsg
+            ( EditionList subModel, EditionListMsg subMsg ) ->
+                toPage EditionL.update subMsg subModel EditionList EditionListMsg
 
-        ( Edition subModel, EditionMsg subMsg ) ->
-            toPage EditionR.update subMsg subModel Edition EditionMsg
+            ( Edition subModel, EditionMsg subMsg ) ->
+                toPage EditionR.update subMsg subModel Edition EditionMsg
 
-        ( Award subModel, AwardMsg subMsg ) ->
-            toPage AwardR.update subMsg subModel Award AwardMsg
+            ( Award subModel, AwardMsg subMsg ) ->
+                toPage AwardR.update subMsg subModel Award AwardMsg
 
-        ( _, _ ) ->
-            model => Cmd.none
+            ( AwardApps subModel, AwardAppsMsg subMsg ) ->
+                toPage App.update subMsg subModel AwardApps AwardAppsMsg
+
+            ( _, _ ) ->
+                model => Cmd.none
 
 
 
@@ -186,6 +204,10 @@ view model =
         Award model ->
             wrap (AwardR.view model)
                 |> Html.map AwardMsg
+
+        AwardApps model ->
+            wrap (App.view model)
+                |> Html.map AwardAppsMsg
 
         Us ->
             wrap us
