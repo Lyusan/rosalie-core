@@ -3,6 +3,7 @@ module Route exposing (Route(..), href, parseLocation)
 import Data.Award exposing (AwardId, aidParser, aidStr)
 import Data.Edition exposing (EditionId, eidParser, eidStr)
 import Data.News exposing (NewsId, newsidParser, nidStr)
+import Data.Application exposing (AppId, appidParser, appidStr)
 import Html exposing (Attribute)
 import Html.Attributes as Attr
 import Navigation exposing (Location)
@@ -17,6 +18,8 @@ type Route
     | Award AwardId
     | Candidates AwardId
     | Nominees AwardId
+    | Application AppId
+    | Winners
     | Us
     | NotFound
 
@@ -33,6 +36,8 @@ parser =
         , map Award (s "awards" </> aidParser)
         , map Candidates (s "candidates" </> aidParser)
         , map Nominees (s "nominees" </> aidParser)
+        , map Application (s "application" </> appidParser)
+        , map Winners (s "winners")
         ]
 
 
@@ -79,6 +84,12 @@ routeStr dest =
 
                 Nominees aid ->
                     [ "nominees", aidStr aid ]
+
+                Application appid ->
+                    [ "application", appidStr appid ]
+
+                Winners ->
+                    [ "winners" ]
 
                 NotFound ->
                     []

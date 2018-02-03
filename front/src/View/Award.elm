@@ -68,7 +68,8 @@ winner data =
                             div [ class "winner-person" ]
                                 [ h3 [] [ text (fullname person) ] ]
                     in
-                        [ h2 [] [ text "Le gagant" ]
+                        [ a [ Route.href (Route.Application app.id) ]
+                            [ h2 [] [ text "Le gagant" ] ]
                         , movieView
                         , personView
                         ]

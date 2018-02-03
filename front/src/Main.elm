@@ -1,6 +1,8 @@
 module Main exposing (..)
 
-import Page.Application.Award as App
+import Page.Application.Award as AppA
+import Page.Application.Detail as AppD
+import Page.Application.Winners as AppW
 import Html exposing (Html, div, h1, img, text)
 import Html.Attributes exposing (class, src)
 import Navigation exposing (Location)
@@ -25,7 +27,9 @@ type Page
     | EditionList EditionL.Model
     | Edition EditionR.Model
     | Award AwardR.Model
-    | AwardApps App.Model
+    | AwardApps AppA.Model
+    | App AppD.Model
+    | Winners AppW.Model
     | NotFound
 
 
@@ -63,10 +67,16 @@ locationPage location =
                 Award (Tuple.first (AwardR.init aid))
 
             Route.Candidates aid ->
-                AwardApps (Tuple.first (App.init aid False))
+                AwardApps (Tuple.first (AppA.init aid False))
 
             Route.Nominees aid ->
-                AwardApps (Tuple.first (App.init aid True))
+                AwardApps (Tuple.first (AppA.init aid True))
+
+            Route.Application appid ->
+                App (Tuple.first (AppD.init appid))
+
+            Route.Winners ->
+                Winners (Tuple.first (AppW.init))
 
             Route.Us ->
                 Us
@@ -98,10 +108,16 @@ locationMsg location =
                 Cmd.map AwardMsg (Tuple.second (AwardR.init aid))
 
             Route.Candidates aid ->
-                Cmd.map AwardAppsMsg (Tuple.second (App.init aid False))
+                Cmd.map AwardAppsMsg (Tuple.second (AppA.init aid False))
 
             Route.Nominees aid ->
-                Cmd.map AwardAppsMsg (Tuple.second (App.init aid True))
+                Cmd.map AwardAppsMsg (Tuple.second (AppA.init aid True))
+
+            Route.Application appid ->
+                Cmd.map AppMsg (Tuple.second (AppD.init appid))
+
+            Route.Winners ->
+                Cmd.map WinnersMsg (Tuple.second (AppW.init))
 
             _ ->
                 Cmd.none
@@ -118,7 +134,9 @@ type Msg
     | EditionListMsg EditionL.Msg
     | EditionMsg EditionR.Msg
     | AwardMsg AwardR.Msg
-    | AwardAppsMsg App.Msg
+    | AwardAppsMsg AppA.Msg
+    | AppMsg AppD.Msg
+    | WinnersMsg AppW.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -172,7 +190,13 @@ updatePage page msg model =
                 toPage AwardR.update subMsg subModel Award AwardMsg
 
             ( AwardApps subModel, AwardAppsMsg subMsg ) ->
-                toPage App.update subMsg subModel AwardApps AwardAppsMsg
+                toPage AppA.update subMsg subModel AwardApps AwardAppsMsg
+
+            ( App subModel, AppMsg subMsg ) ->
+                toPage AppD.update subMsg subModel App AppMsg
+
+            ( Winners subModel, WinnersMsg subMsg ) ->
+                toPage AppW.update subMsg subModel Winners WinnersMsg
 
             ( _, _ ) ->
                 model => Cmd.none
@@ -184,36 +208,41 @@ updatePage page msg model =
 
 view : Model -> Html Msg
 view model =
-    case model.page of
-        NewsFeed model ->
-            wrap (Feed.view model)
-                |> Html.map NewsFeedMsg
+    let
+        toWrap toView model toMsg =
+            wrap (toView model)
+                |> Html.map toMsg
+    in
+        case model.page of
+            NewsFeed model ->
+                toWrap Feed.view model NewsFeedMsg
 
-        News model ->
-            wrap (Read.view model)
-                |> Html.map NewsMsg
+            News model ->
+                toWrap Read.view model NewsMsg
 
-        EditionList model ->
-            wrap (EditionL.view model)
-                |> Html.map EditionListMsg
+            EditionList model ->
+                toWrap EditionL.view model EditionListMsg
 
-        Edition model ->
-            wrap (EditionR.view model)
-                |> Html.map EditionMsg
+            Edition model ->
+                toWrap EditionR.view model EditionMsg
 
-        Award model ->
-            wrap (AwardR.view model)
-                |> Html.map AwardMsg
+            Award model ->
+                toWrap AwardR.view model AwardMsg
 
-        AwardApps model ->
-            wrap (App.view model)
-                |> Html.map AwardAppsMsg
+            AwardApps model ->
+                toWrap AppA.view model AwardAppsMsg
 
-        Us ->
-            wrap us
+            App model ->
+                toWrap AppD.view model AppMsg
 
-        NotFound ->
-            wrap (div [ class "page404" ] [ text "404 Not Found" ])
+            Winners model ->
+                toWrap AppW.view model WinnersMsg
+
+            Us ->
+                wrap us
+
+            NotFound ->
+                wrap (div [ class "page404" ] [ text "404 Not Found" ])
 
 
 

@@ -15,6 +15,11 @@ appUrl appid =
     appsUrl ++ "/" ++ appidStr appid
 
 
+winnersUrl : String
+winnersUrl =
+    apiUrl ++ "/winners"
+
+
 listApps : Http.Request (List App)
 listApps =
     Http.get appsUrl appsDecoder
@@ -23,3 +28,8 @@ listApps =
 retrieveApp : AppId -> Http.Request App
 retrieveApp appid =
     Http.get (appUrl appid) decoder
+
+
+listWinners : Http.Request (List App)
+listWinners =
+    Http.get winnersUrl appsDecoder

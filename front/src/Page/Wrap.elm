@@ -46,6 +46,7 @@ navLinks =
     [ Link Route.NewsFeed "Actualités"
     , Link Route.Us "Qui sommes-nous ?"
     , Link Route.Editions "Nos Éditions"
+    , Link Route.Winners "Les récompensés"
     ]
 
 

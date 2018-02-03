@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import RemoteData exposing (WebData)
 import Data.Application exposing (..)
+import Route
 
 
 detail : WebData App -> Html msg
@@ -56,5 +57,6 @@ list data =
 row : App -> Html msg
 row app =
     div [ class "application-row" ]
-        [ text (app.movie.title ++ " - " ++ (fullname app.person))
+        [ a [ Route.href (Route.Application app.id) ]
+            [ text (app.movie.title ++ " - " ++ (fullname app.person)) ]
         ]
