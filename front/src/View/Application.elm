@@ -7,8 +7,8 @@ import Data.Application exposing (..)
 import Route
 
 
-detail : WebData App -> Html msg
-detail data =
+detail : WebData App -> List (Html msg) -> Html msg
+detail data views =
     let
         view =
             case data of
@@ -30,7 +30,7 @@ detail data =
                     , p [] [ text app.person.desc ]
                     ]
     in
-        div [ class "application-detail" ] view
+        div [ class "application-detail" ] (view ++ views)
 
 
 list : WebData (List App) -> Html msg

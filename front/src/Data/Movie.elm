@@ -36,7 +36,7 @@ interviewDecoder =
     decode Interview
         |> required "id" Decode.int
         |> required "title" Decode.string
-        |> required "video" Decode.string
+        |> required "url_video" Decode.string
 
 
 interviewsDecoder : Decoder (List Interview)

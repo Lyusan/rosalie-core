@@ -53,9 +53,9 @@ retrieveArticle mid aid =
 
 listInterviews : Int -> Http.Request (List Interview)
 listInterviews mid =
-    Http.get (articlesUrl mid) interviewsDecoder
+    Http.get (interviewsUrl mid) interviewsDecoder
 
 
 retrieveInterview : Int -> Int -> Http.Request Interview
 retrieveInterview mid aid =
-    Http.get (articleUrl mid aid) interviewDecoder
+    Http.get (interviewUrl mid aid) interviewDecoder
