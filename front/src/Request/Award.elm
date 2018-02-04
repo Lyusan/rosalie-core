@@ -23,12 +23,12 @@ winnerUrl aid =
 
 candidatesUrl : AwardId -> String
 candidatesUrl aid =
-    (awardUrl aid) ++ "?nominees=false"
+    (awardUrl aid) ++ "/applications?nominees=false"
 
 
 nomineesUrl : AwardId -> String
 nomineesUrl aid =
-    (awardUrl aid) ++ "?nominees=true"
+    (awardUrl aid) ++ "/applications?nominees=true"
 
 
 listAwards : Http.Request (List Award)
