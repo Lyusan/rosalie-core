@@ -51,7 +51,7 @@ articleDetail data =
                     , p [] [ text article.content ]
                     ]
     in
-        div [] detailView
+        div [ class "article-detail" ] detailView
 
 
 interviewList : WebData (List Interview) -> Html msg
@@ -99,4 +99,4 @@ interviewDetail data =
                     , video [ src interview.video ] []
                     ]
     in
-        div [] detailView
+        div [ class "interview-detail" ] detailView

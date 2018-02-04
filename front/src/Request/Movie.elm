@@ -21,41 +21,41 @@ movieUrl mid =
     moviesUrl ++ "/" ++ (toString mid)
 
 
-articlesUrl : Int -> String
-articlesUrl mid =
-    (movieUrl mid) ++ "/articles"
+articlesUrl : String
+articlesUrl =
+    apiUrl ++ "/articles"
 
 
-articleUrl : Int -> Int -> String
-articleUrl mid aid =
-    (articlesUrl mid) ++ "/" ++ (toString aid)
+articleUrl : Int -> String
+articleUrl aid =
+    (articlesUrl) ++ "/" ++ (toString aid)
 
 
-interviewsUrl : Int -> String
-interviewsUrl mid =
-    (movieUrl mid) ++ "/interviews"
+interviewsUrl : String
+interviewsUrl =
+    apiUrl ++ "/interviews"
 
 
-interviewUrl : Int -> Int -> String
-interviewUrl mid iid =
-    (interviewsUrl mid) ++ "/" ++ (toString iid)
+interviewUrl : Int -> String
+interviewUrl iid =
+    (interviewsUrl) ++ "/" ++ (toString iid)
 
 
-listArticles : Int -> Http.Request (List Article)
-listArticles mid =
-    Http.get (articlesUrl mid) articlesDecoder
+listArticles : Http.Request (List Article)
+listArticles =
+    Http.get (articlesUrl) articlesDecoder
 
 
-retrieveArticle : Int -> Int -> Http.Request Article
-retrieveArticle mid aid =
-    Http.get (articleUrl mid aid) articleDecoder
+retrieveArticle : Int -> Http.Request Article
+retrieveArticle aid =
+    Http.get (articleUrl aid) articleDecoder
 
 
-listInterviews : Int -> Http.Request (List Interview)
-listInterviews mid =
-    Http.get (interviewsUrl mid) interviewsDecoder
+listInterviews : Http.Request (List Interview)
+listInterviews =
+    Http.get (interviewsUrl) interviewsDecoder
 
 
-retrieveInterview : Int -> Int -> Http.Request Interview
-retrieveInterview mid aid =
-    Http.get (interviewUrl mid aid) interviewDecoder
+retrieveInterview : Int -> Http.Request Interview
+retrieveInterview aid =
+    Http.get (interviewUrl aid) interviewDecoder
