@@ -13,6 +13,7 @@ import UrlParser exposing ((</>), Parser, map, oneOf, parseHash, s, top)
 type Route
     = NewsFeed
     | News NewsId
+    | Us
     | Editions
     | Edition EditionId
     | Award AwardId
@@ -20,7 +21,8 @@ type Route
     | Nominees AwardId
     | Application AppId
     | Winners
-    | Us
+    | Article Int
+    | Interview Int
     | NotFound
 
 
@@ -38,6 +40,8 @@ parser =
         , map Nominees (s "nominees" </> aidParser)
         , map Application (s "application" </> appidParser)
         , map Winners (s "winners")
+        , map Article (s "article" </> UrlParser.int)
+        , map Interview (s "interview" </> UrlParser.int)
         ]
 
 
@@ -90,6 +94,12 @@ routeStr dest =
 
                 Winners ->
                     [ "winners" ]
+
+                Article i ->
+                    [ "article", toString i ]
+
+                Interview i ->
+                    [ "interview", toString i ]
 
                 NotFound ->
                     []

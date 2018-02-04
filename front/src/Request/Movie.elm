@@ -21,39 +21,39 @@ movieUrl mid =
     moviesUrl ++ "/" ++ (toString mid)
 
 
-articlesUrl : String
-articlesUrl =
-    apiUrl ++ "/articles"
+articlesUrl : Int -> String
+articlesUrl mid =
+    (movieUrl mid) ++ "/articles"
+
+
+interviewsUrl : Int -> String
+interviewsUrl mid =
+    (movieUrl mid) ++ "/interviews"
+
+
+listInterviews : Int -> Http.Request (List Interview)
+listInterviews mid =
+    Http.get (interviewsUrl mid) interviewsDecoder
+
+
+listArticles : Int -> Http.Request (List Article)
+listArticles mid =
+    Http.get (articlesUrl mid) articlesDecoder
 
 
 articleUrl : Int -> String
 articleUrl aid =
-    (articlesUrl) ++ "/" ++ (toString aid)
-
-
-interviewsUrl : String
-interviewsUrl =
-    apiUrl ++ "/interviews"
+    apiUrl ++ "/articles/" ++ (toString aid)
 
 
 interviewUrl : Int -> String
 interviewUrl iid =
-    (interviewsUrl) ++ "/" ++ (toString iid)
-
-
-listArticles : Http.Request (List Article)
-listArticles =
-    Http.get (articlesUrl) articlesDecoder
+    apiUrl ++ "/interviews/" ++ (toString iid)
 
 
 retrieveArticle : Int -> Http.Request Article
 retrieveArticle aid =
     Http.get (articleUrl aid) articleDecoder
-
-
-listInterviews : Http.Request (List Interview)
-listInterviews =
-    Http.get (interviewsUrl) interviewsDecoder
 
 
 retrieveInterview : Int -> Http.Request Interview

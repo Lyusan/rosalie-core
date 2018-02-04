@@ -3,6 +3,8 @@ module Main exposing (..)
 import Page.Application.Award as AppA
 import Page.Application.Detail as AppD
 import Page.Application.Winners as AppW
+import Page.Movie.Article as MovA
+import Page.Movie.Interview as MovI
 import Html exposing (Html, div, h1, img, text)
 import Html.Attributes exposing (class, src)
 import Navigation exposing (Location)
@@ -30,6 +32,8 @@ type Page
     | AwardApps AppA.Model
     | App AppD.Model
     | Winners AppW.Model
+    | Article MovA.Model
+    | Interview MovI.Model
     | NotFound
 
 
@@ -78,6 +82,12 @@ locationPage location =
             Route.Winners ->
                 Winners (Tuple.first (AppW.init))
 
+            Route.Article i ->
+                Article (Tuple.first (MovA.init i))
+
+            Route.Interview i ->
+                Interview (Tuple.first (MovI.init i))
+
             Route.Us ->
                 Us
 
@@ -119,6 +129,12 @@ locationMsg location =
             Route.Winners ->
                 Cmd.map WinnersMsg (Tuple.second (AppW.init))
 
+            Route.Article i ->
+                Cmd.map ArticleMsg (Tuple.second (MovA.init i))
+
+            Route.Interview i ->
+                Cmd.map InterviewMsg (Tuple.second (MovI.init i))
+
             _ ->
                 Cmd.none
 
@@ -137,6 +153,8 @@ type Msg
     | AwardAppsMsg AppA.Msg
     | AppMsg AppD.Msg
     | WinnersMsg AppW.Msg
+    | ArticleMsg MovA.Msg
+    | InterviewMsg MovI.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -198,6 +216,12 @@ updatePage page msg model =
             ( Winners subModel, WinnersMsg subMsg ) ->
                 toPage AppW.update subMsg subModel Winners WinnersMsg
 
+            ( Article subModel, ArticleMsg subMsg ) ->
+                toPage MovA.update subMsg subModel Article ArticleMsg
+
+            ( Interview subModel, InterviewMsg subMsg ) ->
+                toPage MovI.update subMsg subModel Interview InterviewMsg
+
             ( _, _ ) ->
                 model => Cmd.none
 
@@ -237,6 +261,12 @@ view model =
 
             Winners model ->
                 toWrap AppW.view model WinnersMsg
+
+            Article model ->
+                toWrap MovA.view model ArticleMsg
+
+            Interview model ->
+                toWrap MovI.view model InterviewMsg
 
             Us ->
                 wrap us

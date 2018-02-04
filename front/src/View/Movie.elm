@@ -4,6 +4,7 @@ import RemoteData exposing (WebData)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Data.Movie exposing (..)
+import Route
 
 
 articleList : WebData (List Article) -> Html msg
@@ -29,7 +30,9 @@ articleList data =
 articleRow : Article -> Html msg
 articleRow article =
     div [ class "article-row" ]
-        [ text ("Article: " ++ article.title) ]
+        [ a [ Route.href (Route.Article article.id) ]
+            [ text ("Article: " ++ article.title) ]
+        ]
 
 
 articleDetail : WebData Article -> Html msg
@@ -77,7 +80,9 @@ interviewList data =
 interviewRow : Interview -> Html msg
 interviewRow interview =
     div [ class "interview-row" ]
-        [ text ("Interview: " ++ interview.title) ]
+        [ a [ Route.href (Route.Interview interview.id) ]
+            [ text ("Interview: " ++ interview.title) ]
+        ]
 
 
 interviewDetail : WebData Interview -> Html msg
@@ -96,7 +101,12 @@ interviewDetail data =
 
                 RemoteData.Success interview ->
                     [ h1 [] [ text interview.title ]
-                    , video [ src interview.video ] []
+                    , iframe
+                        [ width 420
+                        , height 315
+                        , src interview.video
+                        ]
+                        []
                     ]
     in
         div [ class "interview-detail" ] detailView
