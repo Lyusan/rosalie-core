@@ -8,6 +8,7 @@ module Data.Edition
         , decoder
         )
 
+import Data.Util exposing (strId)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
 import UrlParser
@@ -72,10 +73,5 @@ decoder =
 
 
 strEid : String -> Result String EditionId
-strEid str =
-    case String.toInt str of
-        Ok i ->
-            Ok (EditionId i)
-
-        Err err ->
-            Err err
+strEid =
+    strId EditionId

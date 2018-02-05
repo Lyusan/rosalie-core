@@ -8,6 +8,7 @@ module Data.Award
         , decoder
         )
 
+import Data.Util exposing (strId)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
 import UrlParser
@@ -62,10 +63,5 @@ awardsDecoder =
 
 
 strAid : String -> Result String AwardId
-strAid str =
-    case String.toInt str of
-        Ok i ->
-            Ok (AwardId i)
-
-        Err err ->
-            Err err
+strAid =
+    strId AwardId

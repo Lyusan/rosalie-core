@@ -8,6 +8,7 @@ module Data.News
         , decoder
         )
 
+import Data.Util exposing (strId)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
 import UrlParser
@@ -66,10 +67,5 @@ decoder =
 
 
 strNid : String -> Result String NewsId
-strNid str =
-    case String.toInt str of
-        Ok i ->
-            Ok (NewsId i)
-
-        Err err ->
-            Err err
+strNid =
+    strId NewsId

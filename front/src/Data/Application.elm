@@ -9,6 +9,7 @@ module Data.Application
         , fullname
         )
 
+import Data.Util exposing (strId)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
 import UrlParser
@@ -61,13 +62,8 @@ decoder =
 
 
 strAppid : String -> Result String AppId
-strAppid str =
-    case String.toInt str of
-        Ok i ->
-            Ok (AppId i)
-
-        Err err ->
-            Err err
+strAppid =
+    strId AppId
 
 
 type alias Movie =
