@@ -1,11 +1,12 @@
-module View.Award exposing (..)
+module View.Award exposing (detail, winner)
 
-import Data.Award exposing (..)
-import Data.Application exposing (App, fullname)
+import Data.Award exposing (Award)
+import Data.Application exposing (App, Movie, Person, fullname)
+import View.Util exposing (dataview)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import RemoteData exposing (WebData)
-import Route exposing (..)
+import Route
 
 
 detail : WebData Award -> Html msg -> Html msg
@@ -13,15 +14,6 @@ detail data winnerView =
     let
         awardView =
             case data of
-                RemoteData.NotAsked ->
-                    [ text "afk" ]
-
-                RemoteData.Loading ->
-                    [ text "brb" ]
-
-                RemoteData.Failure err ->
-                    [ text (toString err) ]
-
                 RemoteData.Success award ->
                     [ h1 [] [ text award.name ]
                     , p [] [ text award.desc ]
@@ -32,6 +24,9 @@ detail data winnerView =
                     , winnerView
                     , button [] [ text "FixMe" ]
                     ]
+
+                _ ->
+                    dataview data
     in
         div [ class "award-detail" ]
             awardView
@@ -42,36 +37,27 @@ winner data =
     let
         winnerView =
             case data of
-                RemoteData.NotAsked ->
-                    [ text "afk" ]
-
-                RemoteData.Loading ->
-                    [ text "brb" ]
-
-                RemoteData.Failure err ->
-                    [ text (toString err) ]
-
                 RemoteData.Success app ->
-                    let
-                        movie =
-                            app.movie
+                    [ a [ Route.href (Route.Application app.id) ]
+                        [ h2 [] [ text "Le gagant" ] ]
+                    , movieView app.movie
+                    , personView app.person
+                    ]
 
-                        movieView =
-                            div [ class "winner-movie" ]
-                                [ h3 [] [ text movie.title ]
-                                ]
-
-                        person =
-                            app.person
-
-                        personView =
-                            div [ class "winner-person" ]
-                                [ h3 [] [ text (fullname person) ] ]
-                    in
-                        [ a [ Route.href (Route.Application app.id) ]
-                            [ h2 [] [ text "Le gagant" ] ]
-                        , movieView
-                        , personView
-                        ]
+                _ ->
+                    dataview data
     in
         div [ class "winner-detail" ] winnerView
+
+
+movieView : Movie -> Html msg
+movieView movie =
+    div [ class "winner-movie" ]
+        [ h3 [] [ text movie.title ]
+        ]
+
+
+personView : Person -> Html msg
+personView person =
+    div [ class "winner-person" ]
+        [ h3 [] [ text (fullname person) ] ]

@@ -1,25 +1,43 @@
-module View.News exposing (..)
+module View.News exposing (detail, list)
 
-import Route
+import Data.News exposing (News)
+import View.Util exposing (dataview)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Data.News exposing (..)
+import RemoteData exposing (WebData)
+import Route
 
 
-detail : News -> Html msg
-detail news =
-    div [ class "news-detail" ]
-        [ h1 [ class "news-title" ] [ text news.title ]
-        , p [ class "news-author" ] [ text ("Par " ++ news.author) ]
-        , p [ class "news-pub" ] [ text ("le " ++ news.pub) ]
-        , p [ class "news-content" ] [ text news.content ]
-        ]
+detail : WebData News -> Html msg
+detail data =
+    let
+        view =
+            case data of
+                RemoteData.Success news ->
+                    [ h1 [ class "news-title" ] [ text news.title ]
+                    , p [ class "news-author" ] [ text ("Par " ++ news.author) ]
+                    , p [ class "news-pub" ] [ text ("le " ++ news.pub) ]
+                    , p [ class "news-content" ] [ text news.content ]
+                    ]
+
+                _ ->
+                    dataview data
+    in
+        div [ class "news-detail" ] view
 
 
-list : List News -> Html msg
-list news =
-    div [ class "news-list" ]
-        (List.map row news)
+list : WebData (List News) -> Html msg
+list data =
+    let
+        view =
+            case data of
+                RemoteData.Success feed ->
+                    List.map row feed
+
+                _ ->
+                    dataview data
+    in
+        div [ class "news-list" ] view
 
 
 row : News -> Html msg

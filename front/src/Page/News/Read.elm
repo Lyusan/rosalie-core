@@ -22,18 +22,7 @@ view : Model -> Html Msg
 view model =
     let
         newsView =
-            case model.news of
-                RemoteData.NotAsked ->
-                    text "afk"
-
-                RemoteData.Loading ->
-                    text "brb"
-
-                RemoteData.Failure err ->
-                    text ("rip " ++ (toString err))
-
-                RemoteData.Success news ->
-                    NewsV.detail news
+            NewsV.detail model.news
     in
         div [ class "news-page" ] [ newsView ]
 

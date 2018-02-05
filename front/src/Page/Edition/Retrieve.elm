@@ -25,34 +25,12 @@ view : Model -> Html Msg
 view model =
     let
         awardsView =
-            case model.awards of
-                RemoteData.NotAsked ->
-                    text "afk"
-
-                RemoteData.Loading ->
-                    text "brb"
-
-                RemoteData.Failure err ->
-                    text (toString err)
-
-                RemoteData.Success awards ->
-                    EditionV.listAwards awards
+            EditionV.listAwards model.awards
 
         editionView =
-            case model.edition of
-                RemoteData.NotAsked ->
-                    text "afk"
-
-                RemoteData.Loading ->
-                    text "brb"
-
-                RemoteData.Failure err ->
-                    text (toString err)
-
-                RemoteData.Success edition ->
-                    EditionV.detail edition awardsView
+            EditionV.detail model.edition awardsView
     in
-    div [ class "edition-page" ] [ editionView ]
+        div [ class "edition-page" ] [ editionView ]
 
 
 retrieveEdition : EditionD.EditionId -> Cmd Msg
@@ -87,7 +65,7 @@ update msg model =
                         _ ->
                             Cmd.none
             in
-            { model | edition = data } => cmd
+                { model | edition = data } => cmd
 
         ListAwards data ->
             { model | awards = data } => Cmd.none

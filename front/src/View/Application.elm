@@ -1,9 +1,10 @@
-module View.Application exposing (..)
+module View.Application exposing (detail, list)
 
+import Data.Application exposing (App, fullname)
+import View.Util exposing (dataview)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import RemoteData exposing (WebData)
-import Data.Application exposing (..)
 import Route
 
 
@@ -12,15 +13,6 @@ detail data views =
     let
         view =
             case data of
-                RemoteData.NotAsked ->
-                    [ text "afk" ]
-
-                RemoteData.Loading ->
-                    [ text "brb" ]
-
-                RemoteData.Failure err ->
-                    [ text (toString err) ]
-
                 RemoteData.Success app ->
                     [ h1 []
                         [ text (app.movie.title ++ " - " ++ (fullname app.person)) ]
@@ -29,6 +21,9 @@ detail data views =
                     , h2 [] [ text (fullname app.person) ]
                     , p [] [ text app.person.desc ]
                     ]
+
+                _ ->
+                    dataview data
     in
         div [ class "application-detail" ] (view ++ views)
 
@@ -38,17 +33,11 @@ list data =
     let
         listView =
             case data of
-                RemoteData.NotAsked ->
-                    [ text "afk" ]
-
-                RemoteData.Loading ->
-                    [ text "brb" ]
-
-                RemoteData.Failure err ->
-                    [ text (toString err) ]
-
                 RemoteData.Success apps ->
                     List.map row apps
+
+                _ ->
+                    dataview data
     in
         div [ class "application-list" ]
             listView

@@ -2,6 +2,8 @@ module Data.Application
     exposing
         ( App
         , AppId
+        , Movie
+        , Person
         , appidStr
         , appidParser
         , appsDecoder
@@ -20,6 +22,32 @@ type alias App =
     , movie : Movie
     , person : Person
     }
+
+
+type alias Movie =
+    { id : Int
+    , title : String
+    , desc : String
+    , date : String
+    , img : String
+    , articles : String
+    , interviews : String
+    }
+
+
+type alias Person =
+    { id : Int
+    , firstname : String
+    , lastname : String
+    , birthdate : String
+    , desc : String
+    , img : String
+    }
+
+
+fullname : Person -> String
+fullname person =
+    person.firstname ++ " " ++ person.lastname
 
 
 
@@ -66,17 +94,6 @@ strAppid =
     strId AppId
 
 
-type alias Movie =
-    { id : Int
-    , title : String
-    , desc : String
-    , date : String
-    , img : String
-    , articles : String
-    , interviews : String
-    }
-
-
 movieDecoder : Decoder Movie
 movieDecoder =
     decode Movie
@@ -87,21 +104,6 @@ movieDecoder =
         |> required "img" Decode.string
         |> required "url_articles" Decode.string
         |> required "url_interviews" Decode.string
-
-
-type alias Person =
-    { id : Int
-    , firstname : String
-    , lastname : String
-    , birthdate : String
-    , desc : String
-    , img : String
-    }
-
-
-fullname : Person -> String
-fullname person =
-    person.firstname ++ " " ++ person.lastname
 
 
 personDecoder : Decoder Person

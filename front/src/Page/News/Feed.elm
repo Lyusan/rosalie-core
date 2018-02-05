@@ -22,18 +22,7 @@ view : Model -> Html Msg
 view model =
     let
         feedView =
-            case model.feed of
-                RemoteData.NotAsked ->
-                    text "afk"
-
-                RemoteData.Loading ->
-                    text "brb"
-
-                RemoteData.Failure err ->
-                    text ("rip " ++ (toString err))
-
-                RemoteData.Success feed ->
-                    NewV.list feed
+            NewV.list model.feed
     in
         div [ class "feed-page" ] [ feedView ]
 

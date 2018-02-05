@@ -22,18 +22,7 @@ view : Model -> Html Msg
 view model =
     let
         editionsView =
-            case model.editions of
-                RemoteData.NotAsked ->
-                    text "afk"
-
-                RemoteData.Loading ->
-                    text "brb"
-
-                RemoteData.Failure err ->
-                    text (toString err)
-
-                RemoteData.Success editions ->
-                    EditionV.list editions
+            EditionV.list model.editions
     in
         div [ class "editions-page" ] [ editionsView ]
 
