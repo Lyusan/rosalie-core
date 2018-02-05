@@ -40,7 +40,8 @@ interviewDetail data =
 
 listArticle : List Article -> List (Html msg)
 listArticle articles =
-    List.map articleRow articles
+    (h2 [] [ text "Articles" ])
+        :: (List.map articleRow articles)
 
 
 detailArticle : Article -> List (Html msg)
@@ -60,7 +61,8 @@ articleRow article =
 
 listInterview : List Interview -> List (Html msg)
 listInterview interviews =
-    List.map interviewRow interviews
+    (h2 [] [ text "Interviews" ])
+        :: (List.map interviewRow interviews)
 
 
 detailInterview : Interview -> List (Html msg)
