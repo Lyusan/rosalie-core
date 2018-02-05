@@ -1,34 +1,15 @@
-module Request.Award exposing (..)
+module Request.Award
+    exposing
+        ( listAwards
+        , retrieveAward
+        , retrieveWinner
+        , listApplications
+        )
 
-import Data.Award exposing (..)
+import Data.Award exposing (Award, AwardId, aidStr, awardsDecoder, decoder)
 import Data.Application as App
-import Http
 import Request.Api exposing (apiUrl)
-
-
-awardsUrl : String
-awardsUrl =
-    apiUrl ++ "/awards"
-
-
-awardUrl : AwardId -> String
-awardUrl aid =
-    awardsUrl ++ "/" ++ aidStr aid
-
-
-winnerUrl : AwardId -> String
-winnerUrl aid =
-    awardUrl aid ++ "/winner"
-
-
-candidatesUrl : AwardId -> String
-candidatesUrl aid =
-    (awardUrl aid) ++ "/applications?nominees=false"
-
-
-nomineesUrl : AwardId -> String
-nomineesUrl aid =
-    (awardUrl aid) ++ "/applications?nominees=true"
+import Http
 
 
 listAwards : Http.Request (List Award)
@@ -48,6 +29,30 @@ retrieveWinner aid =
 
 listApplications : AwardId -> Bool -> Http.Request (List App.App)
 listApplications aid bool =
+    Http.get (applicationsUrl bool aid) App.appsDecoder
+
+
+
+-- INTERNALS --
+
+
+awardsUrl : String
+awardsUrl =
+    apiUrl ++ "/awards"
+
+
+awardUrl : AwardId -> String
+awardUrl aid =
+    awardsUrl ++ "/" ++ aidStr aid
+
+
+winnerUrl : AwardId -> String
+winnerUrl aid =
+    awardUrl aid ++ "/winner"
+
+
+applicationsUrl : Bool -> AwardId -> String
+applicationsUrl bool aid =
     let
         url =
             if bool then
@@ -55,4 +60,14 @@ listApplications aid bool =
             else
                 candidatesUrl
     in
-        Http.get (url aid) App.appsDecoder
+        url aid
+
+
+candidatesUrl : AwardId -> String
+candidatesUrl aid =
+    (awardUrl aid) ++ "/applications?nominees=false"
+
+
+nomineesUrl : AwardId -> String
+nomineesUrl aid =
+    (awardUrl aid) ++ "/applications?nominees=true"

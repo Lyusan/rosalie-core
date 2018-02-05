@@ -1,23 +1,13 @@
-module Request.Application exposing (..)
+module Request.Application
+    exposing
+        ( listApps
+        , retrieveApp
+        , listWinners
+        )
 
-import Data.Application exposing (..)
-import Http
+import Data.Application exposing (App, AppId, appidStr, appsDecoder, decoder)
 import Request.Api exposing (apiUrl)
-
-
-appsUrl : String
-appsUrl =
-    apiUrl ++ "/applications"
-
-
-appUrl : AppId -> String
-appUrl appid =
-    appsUrl ++ "/" ++ appidStr appid
-
-
-winnersUrl : String
-winnersUrl =
-    apiUrl ++ "/winners"
+import Http
 
 
 listApps : Http.Request (List App)
@@ -33,3 +23,22 @@ retrieveApp appid =
 listWinners : Http.Request (List App)
 listWinners =
     Http.get winnersUrl appsDecoder
+
+
+
+-- INTERNALS --
+
+
+appsUrl : String
+appsUrl =
+    apiUrl ++ "/applications"
+
+
+appUrl : AppId -> String
+appUrl appid =
+    appsUrl ++ "/" ++ appidStr appid
+
+
+winnersUrl : String
+winnersUrl =
+    apiUrl ++ "/winners"

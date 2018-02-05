@@ -1,18 +1,8 @@
-module Request.News exposing (..)
+module Request.News exposing (listNews, retrieveNews)
 
-import Http
-import Data.News exposing (..)
+import Data.News exposing (News, NewsId, nidStr, feedDecoder, decoder)
 import Request.Api exposing (apiUrl)
-
-
-feedUrl : String
-feedUrl =
-    apiUrl ++ "/news"
-
-
-newsUrl : NewsId -> String
-newsUrl nid =
-    feedUrl ++ "/" ++ (nidStr nid)
+import Http
 
 
 listNews : Http.Request (List News)
@@ -23,3 +13,17 @@ listNews =
 retrieveNews : NewsId -> Http.Request News
 retrieveNews nid =
     Http.get (newsUrl nid) decoder
+
+
+
+-- INTERNALS --
+
+
+feedUrl : String
+feedUrl =
+    apiUrl ++ "/news"
+
+
+newsUrl : NewsId -> String
+newsUrl nid =
+    feedUrl ++ "/" ++ (nidStr nid)
