@@ -10,44 +10,39 @@ import Route
 
 
 detail : WebData Award -> Html msg -> Html msg
-detail data winnerView =
-    let
-        awardView =
-            case data of
-                RemoteData.Success award ->
-                    [ h1 [] [ text award.name ]
-                    , p [] [ text award.desc ]
-                    , a [ Route.href (Route.Candidates award.id) ]
-                        [ h2 [] [ text "Les candidats" ] ]
-                    , a [ Route.href (Route.Nominees award.id) ]
-                        [ h2 [] [ text "Les nominés" ] ]
-                    , winnerView
-                    , button [] [ text "FixMe" ]
-                    ]
-
-                _ ->
-                    dataview data
-    in
-        div [ class "award-detail" ]
-            awardView
+detail data awardWinner =
+    div [ class "award-detail" ] (dataview data (awardDetail awardWinner))
 
 
 winner : WebData App -> Html msg
 winner data =
-    let
-        winnerView =
-            case data of
-                RemoteData.Success app ->
-                    [ a [ Route.href (Route.Application app.id) ]
-                        [ h2 [] [ text "Le gagant" ] ]
-                    , movieView app.movie
-                    , personView app.person
-                    ]
+    div [ class "winner-detail" ] (dataview data winnerView)
 
-                _ ->
-                    dataview data
-    in
-        div [ class "winner-detail" ] winnerView
+
+
+-- INTERNALS --
+
+
+awardDetail : Html msg -> Award -> List (Html msg)
+awardDetail winnerView award =
+    [ h1 [] [ text award.name ]
+    , p [] [ text award.desc ]
+    , a [ Route.href (Route.Candidates award.id) ]
+        [ h2 [] [ text "Les candidats" ] ]
+    , a [ Route.href (Route.Nominees award.id) ]
+        [ h2 [] [ text "Les nominés" ] ]
+    , winnerView
+    , button [] [ text "FixMe" ]
+    ]
+
+
+winnerView : App -> List (Html msg)
+winnerView app =
+    [ a [ Route.href (Route.Application app.id) ]
+        [ h2 [] [ text "Le gagant" ] ]
+    , movieView app.movie
+    , personView app.person
+    ]
 
 
 movieView : Movie -> Html msg

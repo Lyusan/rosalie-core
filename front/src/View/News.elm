@@ -10,38 +10,34 @@ import Route
 
 detail : WebData News -> Html msg
 detail data =
-    let
-        view =
-            case data of
-                RemoteData.Success news ->
-                    [ h1 [ class "news-title" ] [ text news.title ]
-                    , p [ class "news-author" ] [ text ("Par " ++ news.author) ]
-                    , p [ class "news-pub" ] [ text ("le " ++ news.pub) ]
-                    , p [ class "news-content" ] [ text news.content ]
-                    ]
-
-                _ ->
-                    dataview data
-    in
-        div [ class "news-detail" ] view
+    div [ class "news-detail" ] (dataview data newsDetail)
 
 
 list : WebData (List News) -> Html msg
 list data =
-    let
-        view =
-            case data of
-                RemoteData.Success feed ->
-                    List.map row feed
-
-                _ ->
-                    dataview data
-    in
-        div [ class "news-list" ] view
+    div [ class "news-list" ] (dataview data newsList)
 
 
-row : News -> Html msg
-row news =
+
+-- INTERNALS --
+
+
+newsDetail : News -> List (Html msg)
+newsDetail news =
+    [ h1 [ class "news-title" ] [ text news.title ]
+    , p [ class "news-author" ] [ text ("Par " ++ news.author) ]
+    , p [ class "news-pub" ] [ text ("le " ++ news.pub) ]
+    , p [ class "news-content" ] [ text news.content ]
+    ]
+
+
+newsList : List News -> List (Html msg)
+newsList feed =
+    List.map newsRow feed
+
+
+newsRow : News -> Html msg
+newsRow news =
     div [ class "news-row" ]
         [ h2 [ class "news-title" ] [ text news.title ]
         , p [ class "news-author" ] [ text ("Par " ++ news.author) ]

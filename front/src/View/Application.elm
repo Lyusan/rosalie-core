@@ -9,42 +9,38 @@ import Route
 
 
 detail : WebData App -> List (Html msg) -> Html msg
-detail data views =
-    let
-        view =
-            case data of
-                RemoteData.Success app ->
-                    [ h1 []
-                        [ text (app.movie.title ++ " - " ++ (fullname app.person)) ]
-                    , h2 [] [ text app.movie.title ]
-                    , p [] [ text app.movie.desc ]
-                    , h2 [] [ text (fullname app.person) ]
-                    , p [] [ text app.person.desc ]
-                    ]
-
-                _ ->
-                    dataview data
-    in
-        div [ class "application-detail" ] (view ++ views)
+detail data appArticlesInterviews =
+    div [ class "application-detail" ]
+        ((dataview data appDetail) ++ appArticlesInterviews)
 
 
 list : WebData (List App) -> Html msg
 list data =
-    let
-        listView =
-            case data of
-                RemoteData.Success apps ->
-                    List.map row apps
-
-                _ ->
-                    dataview data
-    in
-        div [ class "application-list" ]
-            listView
+    div [ class "application-list" ] (dataview data appList)
 
 
-row : App -> Html msg
-row app =
+
+-- INTERNALS --
+
+
+appDetail : App -> List (Html msg)
+appDetail app =
+    [ h1 []
+        [ text (app.movie.title ++ " - " ++ (fullname app.person)) ]
+    , h2 [] [ text app.movie.title ]
+    , p [] [ text app.movie.desc ]
+    , h2 [] [ text (fullname app.person) ]
+    , p [] [ text app.person.desc ]
+    ]
+
+
+appList : List App -> List (Html msg)
+appList apps =
+    List.map appRow apps
+
+
+appRow : App -> Html msg
+appRow app =
     div [ class "application-row" ]
         [ a [ Route.href (Route.Application app.id) ]
             [ text (app.movie.title ++ " - " ++ (fullname app.person)) ]
