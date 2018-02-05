@@ -1,15 +1,18 @@
-module Page.Application.Detail exposing (..)
+module Page.Application.Detail exposing (Model, Msg, init, update, view)
 
 import Util exposing ((=>))
-import Data.Application exposing (..)
-import RemoteData exposing (WebData)
+import Data.Application exposing (App, AppId)
+import Data.Movie exposing (Article, Interview)
 import Request.Application as App
 import Request.Movie as Mov
-import Data.Movie exposing (Article, Interview)
-import Html exposing (..)
-import View.Application exposing (..)
+import View.Application exposing (detail)
 import View.Movie exposing (articleList, interviewList)
+import Html exposing (..)
 import Html.Attributes exposing (class)
+import RemoteData exposing (WebData)
+
+
+-- MODEL --
 
 
 type alias Model =
@@ -25,42 +28,8 @@ init appid =
         => retrieveApp appid
 
 
-view : Model -> Html Msg
-view model =
-    let
-        articles =
-            articleList model.articles
 
-        interviews =
-            interviewList model.interviews
-
-        views =
-            [ articles, interviews ]
-    in
-        div [ class "application-page" ]
-            [ detail model.application views
-            ]
-
-
-retrieveApp : AppId -> Cmd Msg
-retrieveApp appid =
-    App.retrieveApp appid
-        |> RemoteData.sendRequest
-        |> Cmd.map RetrieveApp
-
-
-listArticles : Int -> Cmd Msg
-listArticles mid =
-    Mov.listArticles mid
-        |> RemoteData.sendRequest
-        |> Cmd.map ListArticles
-
-
-listInterviews : Int -> Cmd Msg
-listInterviews mid =
-    Mov.listInterviews mid
-        |> RemoteData.sendRequest
-        |> Cmd.map ListInterviews
+-- UPDATE --
 
 
 type Msg
@@ -92,3 +61,47 @@ update msg model =
 
         ListInterviews data ->
             { model | interviews = data } => Cmd.none
+
+
+
+-- VIEW --
+
+
+view : Model -> Html Msg
+view model =
+    let
+        articles =
+            articleList model.articles
+
+        interviews =
+            interviewList model.interviews
+
+        views =
+            [ articles, interviews ]
+    in
+        div [ class "application-page" ] [ detail model.application views ]
+
+
+
+-- INTERNALS --
+
+
+retrieveApp : AppId -> Cmd Msg
+retrieveApp appid =
+    App.retrieveApp appid
+        |> RemoteData.sendRequest
+        |> Cmd.map RetrieveApp
+
+
+listArticles : Int -> Cmd Msg
+listArticles mid =
+    Mov.listArticles mid
+        |> RemoteData.sendRequest
+        |> Cmd.map ListArticles
+
+
+listInterviews : Int -> Cmd Msg
+listInterviews mid =
+    Mov.listInterviews mid
+        |> RemoteData.sendRequest
+        |> Cmd.map ListInterviews

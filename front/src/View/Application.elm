@@ -16,7 +16,10 @@ detail data appArticlesInterviews =
 
 list : WebData (List App) -> Html msg
 list data =
-    div [ class "application-list" ] (dataview data appList)
+    div [ class "application-list" ]
+        ([ h1 [] [ text "Winners" ] ]
+            ++ (dataview data appList)
+        )
 
 
 

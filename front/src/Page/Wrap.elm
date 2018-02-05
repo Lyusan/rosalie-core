@@ -1,8 +1,8 @@
-module Page.Wrap exposing (..)
+module Page.Wrap exposing (wrap)
 
+import Route exposing (Route)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Route exposing (Route, href)
 
 
 wrap : Html msg -> Html msg
@@ -16,6 +16,10 @@ wrap content =
         ]
 
 
+
+-- INTERNALS --
+
+
 viewHeader : Html msg
 viewHeader =
     header [ class "header" ]
@@ -24,9 +28,23 @@ viewHeader =
         ]
 
 
+viewFooter : Html msg
+viewFooter =
+    footer [ class "footer" ] [ text "Footer" ]
+
+
 navRefs : List (Html msg)
 navRefs =
     List.map hrefLink navLinks
+
+
+navLinks : List Link
+navLinks =
+    [ Link Route.NewsFeed "Actualités"
+    , Link Route.Us "Qui sommes-nous ?"
+    , Link Route.Editions "Nos Éditions"
+    , Link Route.Winners "Les récompensés"
+    ]
 
 
 type alias Link =
@@ -39,17 +57,3 @@ hrefLink link =
         [ a [ class "navref", Route.href link.dest ]
             [ text link.label ]
         ]
-
-
-navLinks : List Link
-navLinks =
-    [ Link Route.NewsFeed "Actualités"
-    , Link Route.Us "Qui sommes-nous ?"
-    , Link Route.Editions "Nos Éditions"
-    , Link Route.Winners "Les récompensés"
-    ]
-
-
-viewFooter : Html msg
-viewFooter =
-    footer [ class "footer" ] [ text "Footer" ]

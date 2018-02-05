@@ -1,22 +1,22 @@
 module Main exposing (..)
 
+import Util exposing ((=>))
+import Route exposing (Route, parseLocation)
+import Page.Us exposing (us)
+import Page.Wrap exposing (wrap)
 import Page.Application.Award as AppA
 import Page.Application.Detail as AppD
 import Page.Application.Winners as AppW
 import Page.Movie.Article as MovA
 import Page.Movie.Interview as MovI
-import Html exposing (Html, div, h1, img, text)
-import Html.Attributes exposing (class, src)
-import Navigation exposing (Location)
 import Page.Award.Retrieve as AwardR
 import Page.Edition.List as EditionL
 import Page.Edition.Retrieve as EditionR
 import Page.News.Feed as Feed
 import Page.News.Read as Read
-import Page.Us exposing (us)
-import Page.Wrap exposing (wrap)
-import Route exposing (Route, parseLocation)
-import Util exposing ((=>))
+import Html exposing (Html, div, h1, img, text)
+import Html.Attributes exposing (class, src)
+import Navigation exposing (Location)
 
 
 ---- MODEL ----
@@ -164,19 +164,6 @@ update msg model =
             { model | page = locationPage location, location = location }
                 => locationMsg location
 
-        {--
-    NewsFeedMsg subMsg ->
-      updatePage model.page msg model
-
-    NewsMsg subMsg ->
-      updatePage model.page msg model
-
-    EditionListMsg subMsg ->
-      updatePage model.page msg model
-
-    EditionMsg subMsg ->
-      updatePage model.page msg model
-      --}
         _ ->
             updatePage model.page msg model
 

@@ -1,17 +1,21 @@
-module Page.Award.Retrieve exposing (..)
+module Page.Award.Retrieve exposing (Model, Msg, init, update, view)
 
-import Data.Award exposing (..)
-import Data.Application as App
-import Html exposing (..)
-import RemoteData exposing (WebData)
-import Request.Award as AwardR
 import Util exposing ((=>))
-import View.Award exposing (..)
+import Data.Award exposing (Award, AwardId)
+import Data.Application exposing (App)
+import Request.Award as AwardR
+import View.Award exposing (detail, winner)
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import RemoteData exposing (WebData)
+
+
+-- MODEL --
 
 
 type alias Model =
     { award : WebData Award
-    , winner : WebData App.App
+    , winner : WebData App
     }
 
 
@@ -20,32 +24,13 @@ init aid =
     Model RemoteData.Loading RemoteData.Loading => retrieveAward aid
 
 
-view : Model -> Html Msg
-view model =
-    let
-        winnerView =
-            winner model.winner
-    in
-        detail model.award winnerView
 
-
-retrieveAward : AwardId -> Cmd Msg
-retrieveAward aid =
-    AwardR.retrieveAward aid
-        |> RemoteData.sendRequest
-        |> Cmd.map RetrieveAward
-
-
-retrieveWinner : AwardId -> Cmd Msg
-retrieveWinner aid =
-    AwardR.retrieveWinner aid
-        |> RemoteData.sendRequest
-        |> Cmd.map RetrieveWinner
+-- UPDATE --
 
 
 type Msg
     = RetrieveAward (WebData Award)
-    | RetrieveWinner (WebData App.App)
+    | RetrieveWinner (WebData App)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -65,3 +50,34 @@ update msg model =
 
         RetrieveWinner data ->
             { model | winner = data } => Cmd.none
+
+
+
+-- VIEW --
+
+
+view : Model -> Html Msg
+view model =
+    let
+        winnerView =
+            winner model.winner
+    in
+        div [ class "award-page" ] [ (detail model.award winnerView) ]
+
+
+
+-- INTERNALS --
+
+
+retrieveAward : AwardId -> Cmd Msg
+retrieveAward aid =
+    AwardR.retrieveAward aid
+        |> RemoteData.sendRequest
+        |> Cmd.map RetrieveAward
+
+
+retrieveWinner : AwardId -> Cmd Msg
+retrieveWinner aid =
+    AwardR.retrieveWinner aid
+        |> RemoteData.sendRequest
+        |> Cmd.map RetrieveWinner

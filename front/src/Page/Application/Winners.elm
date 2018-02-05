@@ -1,12 +1,15 @@
-module Page.Application.Winners exposing (..)
+module Page.Application.Winners exposing (Model, Msg, init, update, view)
 
 import Util exposing ((=>))
+import Data.Application exposing (App)
 import Request.Application as App
-import View.Application exposing (..)
-import Data.Application exposing (..)
-import RemoteData exposing (WebData)
+import View.Application exposing (list)
 import Html exposing (..)
 import Html.Attributes exposing (class)
+import RemoteData exposing (WebData)
+
+
+-- MODEL --
 
 
 type alias Model =
@@ -18,19 +21,8 @@ init =
     Model RemoteData.Loading => listWinners
 
 
-view : Model -> Html Msg
-view model =
-    div [ class "winners-page" ]
-        [ h1 [] [ text "Winners" ]
-        , list model.winners
-        ]
 
-
-listWinners : Cmd Msg
-listWinners =
-    App.listWinners
-        |> RemoteData.sendRequest
-        |> Cmd.map ListWinners
+-- UPDATE --
 
 
 type Msg
@@ -42,3 +34,24 @@ update msg model =
     case msg of
         ListWinners data ->
             { model | winners = data } => Cmd.none
+
+
+
+-- VIEW --
+
+
+view : Model -> Html Msg
+view model =
+    div [ class "winners-page" ]
+        [ (list model.winners) ]
+
+
+
+-- INTERNALS --
+
+
+listWinners : Cmd Msg
+listWinners =
+    App.listWinners
+        |> RemoteData.sendRequest
+        |> Cmd.map ListWinners

@@ -1,12 +1,15 @@
-module Page.Movie.Interview exposing (..)
+module Page.Movie.Interview exposing (Model, Msg, init, update, view)
 
-import RemoteData exposing (WebData)
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Util exposing ((=>))
 import Data.Movie exposing (Interview)
 import Request.Movie as Req
 import View.Movie exposing (interviewDetail)
-import Util exposing ((=>))
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import RemoteData exposing (WebData)
+
+
+-- MODEL --
 
 
 type alias Model =
@@ -18,16 +21,8 @@ init aid =
     Model RemoteData.Loading => retrieveInterview aid
 
 
-view : Model -> Html Msg
-view model =
-    div [ class "page-interview" ] [ interviewDetail model.interview ]
 
-
-retrieveInterview : Int -> Cmd Msg
-retrieveInterview aid =
-    Req.retrieveInterview aid
-        |> RemoteData.sendRequest
-        |> Cmd.map RetrieveInterview
+-- UPDATE --
 
 
 type Msg
@@ -39,3 +34,23 @@ update msg model =
     case msg of
         RetrieveInterview data ->
             { model | interview = data } => Cmd.none
+
+
+
+-- VIEW--
+
+
+view : Model -> Html Msg
+view model =
+    div [ class "page-interview" ] [ interviewDetail model.interview ]
+
+
+
+-- INTERNALS --
+
+
+retrieveInterview : Int -> Cmd Msg
+retrieveInterview aid =
+    Req.retrieveInterview aid
+        |> RemoteData.sendRequest
+        |> Cmd.map RetrieveInterview

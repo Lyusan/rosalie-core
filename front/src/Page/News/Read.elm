@@ -1,41 +1,32 @@
-module Page.News.Read exposing (..)
+module Page.News.Read exposing (Model, Msg, init, update, view)
 
-import RemoteData exposing (WebData)
 import Util exposing ((=>))
-import Data.News as NewsD
+import Data.News exposing (News, NewsId)
 import View.News as NewsV
 import Request.News as NewsR
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import RemoteData exposing (WebData)
+
+
+-- MODEL --
 
 
 type alias Model =
-    { news : WebData NewsD.News }
+    { news : WebData News }
 
 
-init : NewsD.NewsId -> ( Model, Cmd Msg )
+init : NewsId -> ( Model, Cmd Msg )
 init nid =
     Model RemoteData.Loading => retrieveNews nid
 
 
-view : Model -> Html Msg
-view model =
-    let
-        newsView =
-            NewsV.detail model.news
-    in
-        div [ class "news-page" ] [ newsView ]
 
-
-retrieveNews : NewsD.NewsId -> Cmd Msg
-retrieveNews nid =
-    NewsR.retrieveNews nid
-        |> RemoteData.sendRequest
-        |> Cmd.map RetrieveNews
+-- UPDATE --
 
 
 type Msg
-    = RetrieveNews (WebData NewsD.News)
+    = RetrieveNews (WebData News)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -43,3 +34,23 @@ update msg model =
     case msg of
         RetrieveNews data ->
             Model data => Cmd.none
+
+
+
+-- VIEW --
+
+
+view : Model -> Html Msg
+view model =
+    div [ class "news-page" ] [ (NewsV.detail model.news) ]
+
+
+
+-- INTERNALS --
+
+
+retrieveNews : NewsId -> Cmd Msg
+retrieveNews nid =
+    NewsR.retrieveNews nid
+        |> RemoteData.sendRequest
+        |> Cmd.map RetrieveNews
