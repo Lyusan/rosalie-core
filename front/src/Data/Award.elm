@@ -1,4 +1,12 @@
-module Data.Award exposing (..)
+module Data.Award
+    exposing
+        ( Award
+        , AwardId
+        , aidStr
+        , aidParser
+        , awardsDecoder
+        , decoder
+        )
 
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
@@ -13,13 +21,12 @@ type alias Award =
     }
 
 
+
+-- IDENTIFIERS --
+
+
 type AwardId
     = AwardId Int
-
-
-aidInt : AwardId -> Int
-aidInt (AwardId aid) =
-    aid
 
 
 aidStr : AwardId -> String
@@ -27,19 +34,13 @@ aidStr (AwardId aid) =
     toString aid
 
 
-strAid : String -> Result String AwardId
-strAid str =
-    case String.toInt str of
-        Ok i ->
-            Ok (AwardId i)
-
-        Err err ->
-            Err err
-
-
 aidParser : UrlParser.Parser (AwardId -> a) a
 aidParser =
     UrlParser.custom "AWARDID" strAid
+
+
+
+-- SERIALIZERS--
 
 
 decoder : Decoder Award
@@ -54,3 +55,17 @@ decoder =
 awardsDecoder : Decoder (List Award)
 awardsDecoder =
     Decode.list decoder
+
+
+
+-- INTERNALS --
+
+
+strAid : String -> Result String AwardId
+strAid str =
+    case String.toInt str of
+        Ok i ->
+            Ok (AwardId i)
+
+        Err err ->
+            Err err

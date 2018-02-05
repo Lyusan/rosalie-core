@@ -1,4 +1,13 @@
-module Data.Application exposing (..)
+module Data.Application
+    exposing
+        ( App
+        , AppId
+        , appidStr
+        , appidParser
+        , appsDecoder
+        , decoder
+        , fullname
+        )
 
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
@@ -12,6 +21,55 @@ type alias App =
     }
 
 
+
+-- IDENTIFIERS --
+
+
+type AppId
+    = AppId Int
+
+
+appidParser : UrlParser.Parser (AppId -> a) a
+appidParser =
+    UrlParser.custom "APPID" strAppid
+
+
+appidStr : AppId -> String
+appidStr (AppId appid) =
+    toString appid
+
+
+
+-- SERIALIZERS --
+
+
+appsDecoder : Decoder (List App)
+appsDecoder =
+    Decode.list decoder
+
+
+decoder : Decoder App
+decoder =
+    decode App
+        |> required "id" (Decode.map AppId Decode.int)
+        |> required "movie" movieDecoder
+        |> required "person" personDecoder
+
+
+
+-- INTERNALS --
+
+
+strAppid : String -> Result String AppId
+strAppid str =
+    case String.toInt str of
+        Ok i ->
+            Ok (AppId i)
+
+        Err err ->
+            Err err
+
+
 type alias Movie =
     { id : Int
     , title : String
@@ -21,6 +79,18 @@ type alias Movie =
     , articles : String
     , interviews : String
     }
+
+
+movieDecoder : Decoder Movie
+movieDecoder =
+    decode Movie
+        |> required "id" Decode.int
+        |> required "title" Decode.string
+        |> required "desc" Decode.string
+        |> required "date" Decode.string
+        |> required "img" Decode.string
+        |> required "url_articles" Decode.string
+        |> required "url_interviews" Decode.string
 
 
 type alias Person =
@@ -38,55 +108,6 @@ fullname person =
     person.firstname ++ " " ++ person.lastname
 
 
-type AppId
-    = AppId Int
-
-
-appidInt : AppId -> Int
-appidInt (AppId appid) =
-    appid
-
-
-appidStr : AppId -> String
-appidStr (AppId appid) =
-    toString appid
-
-
-strAppid : String -> Result String AppId
-strAppid str =
-    case String.toInt str of
-        Ok i ->
-            Ok (AppId i)
-
-        Err err ->
-            Err err
-
-
-appidParser : UrlParser.Parser (AppId -> a) a
-appidParser =
-    UrlParser.custom "APPID" strAppid
-
-
-decoder : Decoder App
-decoder =
-    decode App
-        |> required "id" (Decode.map AppId Decode.int)
-        |> required "movie" movieDecoder
-        |> required "person" personDecoder
-
-
-movieDecoder : Decoder Movie
-movieDecoder =
-    decode Movie
-        |> required "id" Decode.int
-        |> required "title" Decode.string
-        |> required "desc" Decode.string
-        |> required "date" Decode.string
-        |> required "img" Decode.string
-        |> required "url_articles" Decode.string
-        |> required "url_interviews" Decode.string
-
-
 personDecoder : Decoder Person
 personDecoder =
     decode Person
@@ -96,8 +117,3 @@ personDecoder =
         |> required "birthdate" Decode.string
         |> required "desc" Decode.string
         |> required "img" Decode.string
-
-
-appsDecoder : Decoder (List App)
-appsDecoder =
-    Decode.list decoder

@@ -1,4 +1,12 @@
-module Data.News exposing (..)
+module Data.News
+    exposing
+        ( News
+        , NewsId
+        , nidStr
+        , newsidParser
+        , feedDecoder
+        , decoder
+        )
 
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
@@ -15,13 +23,12 @@ type alias News =
     }
 
 
+
+-- IDENTIFIERS --
+
+
 type NewsId
     = NewsId Int
-
-
-nidInt : NewsId -> Int
-nidInt (NewsId nid) =
-    nid
 
 
 nidStr : NewsId -> String
@@ -29,19 +36,18 @@ nidStr (NewsId nid) =
     toString nid
 
 
-strNid : String -> Result String NewsId
-strNid str =
-    case String.toInt str of
-        Ok i ->
-            Ok (NewsId i)
-
-        Err err ->
-            Err err
-
-
 newsidParser : UrlParser.Parser (NewsId -> a) a
 newsidParser =
     UrlParser.custom "NEWSID" strNid
+
+
+
+-- SERIALIZERS --
+
+
+feedDecoder : Decoder (List News)
+feedDecoder =
+    Decode.list decoder
 
 
 decoder : Decoder News
@@ -55,6 +61,15 @@ decoder =
         |> required "content" Decode.string
 
 
-feedDecoder : Decoder (List News)
-feedDecoder =
-    Decode.list decoder
+
+-- INTERNALS --
+
+
+strNid : String -> Result String NewsId
+strNid str =
+    case String.toInt str of
+        Ok i ->
+            Ok (NewsId i)
+
+        Err err ->
+            Err err

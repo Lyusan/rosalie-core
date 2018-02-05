@@ -1,4 +1,12 @@
-module Data.Edition exposing (..)
+module Data.Edition
+    exposing
+        ( Edition
+        , EditionId
+        , eidStr
+        , eidParser
+        , editionsDecoder
+        , decoder
+        )
 
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
@@ -18,13 +26,12 @@ type alias Edition =
     }
 
 
+
+-- IDENTIFIERS--
+
+
 type EditionId
     = EditionId Int
-
-
-eidInt : EditionId -> Int
-eidInt (EditionId eid) =
-    eid
 
 
 eidStr : EditionId -> String
@@ -32,19 +39,18 @@ eidStr (EditionId eid) =
     toString eid
 
 
-strEid : String -> Result String EditionId
-strEid str =
-    case String.toInt str of
-        Ok i ->
-            Ok (EditionId i)
-
-        Err err ->
-            Err err
-
-
 eidParser : UrlParser.Parser (EditionId -> a) a
 eidParser =
     UrlParser.custom "EDITIONID" strEid
+
+
+
+-- SERIALIZERS --
+
+
+editionsDecoder : Decoder (List Edition)
+editionsDecoder =
+    Decode.list decoder
 
 
 decoder : Decoder Edition
@@ -61,6 +67,15 @@ decoder =
         |> required "url_awards" Decode.string
 
 
-editionsDecoder : Decoder (List Edition)
-editionsDecoder =
-    Decode.list decoder
+
+-- INTERNALS --
+
+
+strEid : String -> Result String EditionId
+strEid str =
+    case String.toInt str of
+        Ok i ->
+            Ok (EditionId i)
+
+        Err err ->
+            Err err

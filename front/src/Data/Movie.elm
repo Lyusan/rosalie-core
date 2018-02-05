@@ -1,4 +1,12 @@
-module Data.Movie exposing (..)
+module Data.Movie
+    exposing
+        ( Article
+        , Interview
+        , articlesDecoder
+        , articleDecoder
+        , interviewsDecoder
+        , interviewDecoder
+        )
 
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
@@ -18,6 +26,20 @@ type alias Interview =
     }
 
 
+
+-- SERIALIZERS --
+
+
+articlesDecoder : Decoder (List Article)
+articlesDecoder =
+    Decode.list articleDecoder
+
+
+interviewsDecoder : Decoder (List Interview)
+interviewsDecoder =
+    Decode.list interviewDecoder
+
+
 articleDecoder : Decoder Article
 articleDecoder =
     decode Article
@@ -26,19 +48,9 @@ articleDecoder =
         |> required "content" Decode.string
 
 
-articlesDecoder : Decoder (List Article)
-articlesDecoder =
-    Decode.list articleDecoder
-
-
 interviewDecoder : Decoder Interview
 interviewDecoder =
     decode Interview
         |> required "id" Decode.int
         |> required "title" Decode.string
         |> required "url_video" Decode.string
-
-
-interviewsDecoder : Decoder (List Interview)
-interviewsDecoder =
-    Decode.list interviewDecoder
