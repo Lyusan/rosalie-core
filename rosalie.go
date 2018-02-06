@@ -53,18 +53,15 @@ func main() {
 	defer db.Close()
 	createSchema(db)
 	testInsert(db)
+
 	engine := gin.Default()
 	router := engine.Group("/v1")
 	news.NewsRegister(router)
-<<<<<<< HEAD
 	categorie.CategorieRegister(router)
-	engine.Run()
-=======
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "4000"
 	}
 	engine.Run(fmt.Sprintf(":%s", port))
->>>>>>> add port configuration from env
 }
