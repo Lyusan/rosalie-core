@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
-	"./news"
-	"./utils"
+	"./back/news"
+	"./back/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
