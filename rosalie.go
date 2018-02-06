@@ -1,19 +1,16 @@
 package main
 
 import (
+	"os"
 	"time"
+	"fmt"
 
-<<<<<<< HEAD:back/main.go
 	"./categorie"
 	"./news"
 	"./utils"
-=======
-	"./back/news"
-	"./back/utils"
->>>>>>> ebff3a7ae88cfca62512eb560409b44738b424a1:rosalie.go
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-  _ "github.com/joho/godotenv/autoload"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func testInsert(db *gorm.DB) {
@@ -53,12 +50,21 @@ func createSchema(db *gorm.DB) {
 
 func main() {
 	db := utils.InitDB()
-  defer db.Close()
+	defer db.Close()
 	createSchema(db)
 	testInsert(db)
 	engine := gin.Default()
 	router := engine.Group("/v1")
 	news.NewsRegister(router)
+<<<<<<< HEAD
 	categorie.CategorieRegister(router)
 	engine.Run()
+=======
+
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "4000"
+	}
+	engine.Run(fmt.Sprintf(":%s", port))
+>>>>>>> add port configuration from env
 }
