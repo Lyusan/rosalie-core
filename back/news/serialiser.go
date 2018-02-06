@@ -3,7 +3,7 @@ package news
 import "github.com/gin-gonic/gin"
 
 type NewsResponse struct {
-	ID              uint   `json:"-"`
+	ID              uint   `json:"id"`
 	Title           string `json:"title"`
 	Author          string `json:"author"`
 	PublicationDate string `json:"publicationDate"`
