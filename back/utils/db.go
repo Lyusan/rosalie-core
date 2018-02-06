@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+  "os"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -10,7 +11,11 @@ import (
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
-	db, err := gorm.Open("postgres", "user=postgres dbname=rosalie sslmode=disable password=root")
+  username := os.Getenv("DB_USERNAME")
+  dbname := os.Getenv("DB_NAME")
+  password := os.Getenv("DB_PASSWORD")
+  login_string := fmt.Sprintf("user=%s dbname=%s sslmode=disable password=%s", username, dbname, password)
+	db, err := gorm.Open("postgres", login_string)
 	if err != nil {
 		fmt.Print("Error connecting db ---")
 	}

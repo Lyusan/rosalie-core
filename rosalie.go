@@ -7,6 +7,7 @@ import (
 	"./back/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+  _ "github.com/joho/godotenv/autoload"
 )
 
 func testInsert(db *gorm.DB) {
@@ -30,11 +31,11 @@ func createSchema(db *gorm.DB) {
 
 func main() {
 	db := utils.InitDB()
+  defer db.Close()
 	createSchema(db)
 	testInsert(db)
 	engine := gin.Default()
 	router := engine.Group("/v1")
 	news.NewsRegister(router)
 	engine.Run()
-	defer db.Close()
 }
