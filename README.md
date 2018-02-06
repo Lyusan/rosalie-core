@@ -1,4 +1,4 @@
-# Rosalie
+# Rosalie [![pipeline status]][pipeline]
 
 The backend of the rosalie project, written in [golang].
 
@@ -34,3 +34,5 @@ either export them in your shell, or simply write them in an `.env` file, loaded
 
 [golang]: https://golang.org
 [godotenv]: https://github.com/joho/godotenv
+[pipeline status]: https://git.036.fr/rosalie/core/badges/master/pipeline.svg
+[pipeline]: https://git.036.fr/rosalie/core/commits/master
