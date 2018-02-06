@@ -13,6 +13,7 @@ import (
 >>>>>>> ebff3a7ae88cfca62512eb560409b44738b424a1:rosalie.go
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+  _ "github.com/joho/godotenv/autoload"
 )
 
 func testInsert(db *gorm.DB) {
@@ -52,6 +53,7 @@ func createSchema(db *gorm.DB) {
 
 func main() {
 	db := utils.InitDB()
+  defer db.Close()
 	createSchema(db)
 	testInsert(db)
 	engine := gin.Default()
@@ -59,5 +61,4 @@ func main() {
 	news.NewsRegister(router)
 	categorie.CategorieRegister(router)
 	engine.Run()
-	defer db.Close()
 }
