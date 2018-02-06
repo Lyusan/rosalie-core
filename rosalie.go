@@ -3,9 +3,14 @@ package main
 import (
 	"time"
 
+<<<<<<< HEAD:back/main.go
 	"./categorie"
 	"./news"
 	"./utils"
+=======
+	"./back/news"
+	"./back/utils"
+>>>>>>> ebff3a7ae88cfca62512eb560409b44738b424a1:rosalie.go
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
