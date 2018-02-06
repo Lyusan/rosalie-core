@@ -18,6 +18,11 @@ the `make rosalie-static` task.
 
 ## How to run
 
+You'll need postgresql up and running, don't forget to create a DB and to have the correct access
+credentials.
+
+> Note: for now, it seems the app must be run twice in order to create the db schema.
+
 The application looks in it's environment for the DB url, credentials, and the port. You can
 either export them in your shell, or simply write them in an `.env` file, loaded by [godotenv].
 
