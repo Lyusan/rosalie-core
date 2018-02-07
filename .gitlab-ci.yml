@@ -26,7 +26,7 @@ build:
   artifacts:
     name: rosalie-linux-standalone
     paths:
-    - rosalie
+      - rosalie
 
 release:
   stage: release

@@ -2,19 +2,24 @@ package utils
 
 import (
 	"fmt"
-  "os"
+	"os"
 
+	_ "githu.com/jinzhu/gorm/dianects/postgres"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
-  username := os.Getenv("DB_USERNAME")
-  dbname := os.Getenv("DB_NAME")
-  password := os.Getenv("DB_PASSWORD")
-  login_string := fmt.Sprintf("user=%s dbname=%s sslmode=disable password=%s", username, dbname, password)
+	dburl := os.Getenv("DB_URL")
+	if len(dburl) == 0 {
+		dburl = "localhost"
+	}
+	username := os.Getenv("DB_USERNAME")
+	dbname := os.Getenv("DB_NAME")
+	password := os.Getenv("DB_PASSWORD")
+	login_string := fmt.Sprintf("host=%s dbname=%s user=%s password=%s sslmode=disable",
+		dburl, dbname, username, password)
 	db, err := gorm.Open("postgres", login_string)
 	if err != nil {
 		fmt.Print("Error connecting db ---")
