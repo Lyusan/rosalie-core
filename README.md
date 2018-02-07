@@ -32,11 +32,13 @@ either export them in your shell, or simply write them in an `.env` file, loaded
 |-------------|-----------|--------|
 |`DB_NAME`|The name of the database|:heavy_check_mark:|
 |`DB_USERNAME`|Username used for the database|:heavy_check_mark:️|
-|`DB_PASSWORD`|Password used for the database|:heavy_check_mark:|
+|`DB_PASSWORD`|Password used for the database|:heavy_check_mark: [^1]|
 |`DB_URL`|Url of the database (defaults to localhost)|defaults to `localhost`|
 |`PORT`|Port the application will listen to|defaults to `4000`|
 
 
+
+[^1]: can be empty if no password is required for login
 [golang]: https://golang.org
 [godotenv]: https://github.com/joho/godotenv
 [pipeline status]: https://git.036.fr/rosalie/core/badges/master/pipeline.svg
