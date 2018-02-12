@@ -1,5 +1,6 @@
 stages:
   - build
+  - build-docker
   - release
   - deploy
 
@@ -20,26 +21,31 @@ build:
   script:
     - make get
     - make rosalie-static
-  only:
-    - master
-    - develop
   artifacts:
     name: rosalie-linux-standalone
     paths:
       - rosalie
 
-release:
-  stage: release
+build-docker:
+  stage: build-docker
   script:
     - docker build --pull -t $HUB_URL:$TEST_TAG .
     - docker push $HUB_URL:$TEST_TAG
+  dependencies:
+    - build
+  only:
+    - master
+    - develop
+
+release:
+  stage: release
+  script:
+    - docker pull $HUB_URL:$TEST_TAG
     - docker tag $HUB_URL:$TEST_TAG $HUB_URL:$PROD_TAG
     - docker push $HUB_URL:$PROD_TAG
   only:
     - master
   when: on_success
-  dependencies:
-    - build
 
 deploy:
   stage: deploy
