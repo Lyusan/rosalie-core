@@ -10,8 +10,8 @@ type Award struct {
 	gorm.Model
 	Categorie   Categorie
 	CategorieID int
-	Movie       Movie
-	MovieID     int
+	Edition     Edition
+	EditionID   int
 }
 
 func FindManyAwards() ([]Award, error) {
