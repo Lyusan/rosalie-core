@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	_ "githu.com/jinzhu/gorm/dianects/postgres"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 var DB *gorm.DB
