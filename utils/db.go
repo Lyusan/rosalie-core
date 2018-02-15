@@ -10,7 +10,7 @@ import (
 
 var DB *gorm.DB
 
-func InitDB() *gorm.DB {
+func InitDB() (*gorm.DB, error ) {
 	dburl := os.Getenv("DB_URL")
 	if len(dburl) == 0 {
 		dburl = "localhost"
@@ -18,15 +18,14 @@ func InitDB() *gorm.DB {
 	username := os.Getenv("DB_USERNAME")
 	dbname := os.Getenv("DB_NAME")
 	password := os.Getenv("DB_PASSWORD")
-	login_string := fmt.Sprintf("host=%s dbname=%s user=%s password=%s sslmode=disable",
+	loginString := fmt.Sprintf("host=%s dbname=%s user=%s password=%s sslmode=disable",
 		dburl, dbname, username, password)
-	db, err := gorm.Open("postgres", login_string)
+	db, err := gorm.Open("postgres", loginString)
 	if err != nil {
-		fmt.Print("Error connecting db ---")
+    return nil, err
 	}
 	DB = db
-	print(db)
-	return db
+	return db, nil
 }
 
 func GetDB() *gorm.DB {

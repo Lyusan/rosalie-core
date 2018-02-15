@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"log"
 
 	"./model"
 	"./routers"
@@ -43,6 +44,7 @@ func testInsert(db *gorm.DB) {
 }
 
 func createSchema(db *gorm.DB) {
+	log.Println("Doing database migrations")
 	for _, model := range []interface{}{&model.News{}, &model.Categorie{} /*, &Edition{}, , &Award{}, &Movie{}, &Person{}, &Interview{}, &Article{}, &Application{}*/} {
 		db.DropTable(model)
 		db.AutoMigrate(model)
@@ -50,9 +52,13 @@ func createSchema(db *gorm.DB) {
 }
 
 func main() {
-	db := utils.InitDB()
+	db, err := utils.InitDB()
+	if err != nil {
+		log.Fatalf("DB: Cannot connect: %s\n", err)
+	}
 	defer db.Close()
 	createSchema(db)
+	time.Sleep(2 * time.Second)
 	testInsert(db)
 
 	engine := gin.Default()
