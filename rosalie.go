@@ -46,7 +46,7 @@ func testInsert(db *gorm.DB) {
 func createSchema(db *gorm.DB) {
 	log.Println("Doing database migrations")
 	for _, model := range []interface{}{&model.News{}, &model.Categorie{} /*, &Edition{}, , &Award{}, &Movie{}, &Person{}, &Interview{}, &Article{}, &Application{}*/} {
-		db.DropTable(model)
+		db.DropTableIfExists(model)
 		db.AutoMigrate(model)
 	}
 }
