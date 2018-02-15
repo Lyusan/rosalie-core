@@ -5,12 +5,21 @@ services:
     restart: always
     networks:
       - web
+    ports:
+      - "8080:80"
     environment:
       - VIRTUAL_HOST=rosalie.036.fr
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=rosalie.036.fr
       - LETSENCRYPT_EMAIL=sushifu@gmx.fr
-
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_URL=db
+      - PORT=8080
+    depends_on:
+      - db
+  db:
+    image: postgres
 networks:
   web:
     external: true
