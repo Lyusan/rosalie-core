@@ -12,8 +12,8 @@ import (
 )
 
 func CategorieRegister(router *gin.RouterGroup) {
-	router.GET("/categorie", CategorieList)
-	router.GET("/categorie/:id", CategorieByID)
+	router.GET("/categories", CategorieList)
+	router.GET("/categories/:id", CategorieByID)
 }
 
 func CategorieList(c *gin.Context) {
