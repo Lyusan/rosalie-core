@@ -14,7 +14,7 @@ services:
       - LETSENCRYPT_EMAIL=sushifu@gmx.fr
       - DB_NAME=rosalie
       - DB_USER=rosalie
-      - DB_URL=db
+      - DB_URL=postgres-dev
       - PORT=8080
     depends_on:
       - db
