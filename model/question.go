@@ -9,11 +9,13 @@ import (
 
 type Question struct {
 	gorm.Model
-	FirstName   string
-	LastName    string
-	BirthDate   time.Time
-	Description string
-	ImgUrl      string
+	FirstName     string
+	LastName      string
+	BirthDate     time.Time
+	Description   string
+	ImgUrl        string
+	Application   Application
+	ApplicationID int
 }
 
 func FindManyQuestions() ([]Question, error) {

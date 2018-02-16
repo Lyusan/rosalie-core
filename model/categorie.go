@@ -9,6 +9,7 @@ type Categorie struct {
 	gorm.Model
 	Name        string
 	Description string
+	Awards      []Award
 }
 
 func FindManyCategories() ([]Categorie, error) {

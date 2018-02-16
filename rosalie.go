@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"time"
-	"log"
 
 	"./model"
 	"./routers"
@@ -41,12 +41,26 @@ func testInsert(db *gorm.DB) {
 		Description: "",
 	}
 	db.Create(&categorie3)
+	award1 := model.Award{
+		CategorieID: 1,
+	}
+	db.Create(&award1)
+	award2 := model.Award{
+		CategorieID: 1,
+	}
+	db.Create(&award2)
+	awardsResult := []model.Award{}
+	db.Find(&awardsResult)
+	for i, _ := range awardsResult {
+		db.Model(awardsResult[i]).Related(&awardsResult[i].Categorie)
+	}
+	fmt.Println(awardsResult)
 }
 
 func createSchema(db *gorm.DB) {
 	for _, model := range []interface{}{&model.Application{}, &model.Article{}, &model.Award{}, &model.Categorie{}, &model.Edition{}, &model.Interview{}, &model.Movie{}, &model.News{}, &model.Person{}, &model.Question{}} {
 		db.DropTableIfExists(model)
-		db.AutoMigrate(model)
+		db.CreateTable(model)
 	}
 }
 
@@ -56,6 +70,7 @@ func main() {
 		log.Fatalf("DB: Cannot connect: %s\n", err)
 	}
 	defer db.Close()
+	db.LogMode(true)
 	createSchema(db)
 	time.Sleep(2 * time.Second)
 	testInsert(db)

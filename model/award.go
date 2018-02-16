@@ -12,6 +12,7 @@ type Award struct {
 	CategorieID int
 	Edition     Edition
 	EditionID   int
+	Applications []Application
 }
 
 func FindManyAwards() ([]Award, error) {

@@ -13,8 +13,8 @@ type Interview struct {
 	Title           string
 	VideoUrl        string
 	PublicationDate time.Time
-
-	MovieID int
+	Movie           Movie
+	MovieID         int
 }
 
 func FindManyInterviews() ([]Interview, error) {

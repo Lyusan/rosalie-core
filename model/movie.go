@@ -16,8 +16,9 @@ type Movie struct {
 	Image         string
 	RewardingDate time.Time
 
-	Articles  []Article
-	Inteviews []Interview
+	Articles     []Article
+	Inteviews    []Interview
+	Applications []Application
 }
 
 func FindManyMovies() ([]Movie, error) {

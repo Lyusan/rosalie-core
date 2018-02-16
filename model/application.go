@@ -7,10 +7,13 @@ import (
 
 type Application struct {
 	gorm.Model
-	Award   Award
-	AwardID int
-	Movie   Movie
-	MoveID  int
+	Award    Award
+	AwardID  int
+	Movie    Movie
+	MoveID   int
+	Person   Person
+	PersonID int
+	Questions []Question
 }
 
 func FindManyApplications() ([]Application, error) {
