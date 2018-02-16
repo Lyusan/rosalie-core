@@ -12,8 +12,8 @@ services:
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=rosalie.036.fr
       - LETSENCRYPT_EMAIL=sushifu@gmx.fr
-      - DB_NAME=postgres
-      - DB_USER=postgres
+      - DB_NAME=rosalie
+      - DB_USER=rosalie
       - DB_URL=db
       - PORT=8080
     depends_on:
