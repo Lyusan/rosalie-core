@@ -1,14 +1,15 @@
 package serializer
 
 import (
-	"github.com/gin-gonic/gin"
 	"../model"
+	"github.com/gin-gonic/gin"
 )
 
 type News struct {
 	ID              uint   `json:"id"`
 	Title           string `json:"title"`
 	Author          string `json:"author"`
+	ImgSrc          string `json:"imgSrc"`
 	PublicationDate string `json:"publicationDate"`
 	UpdatedDate     string `json:"updateDate"`
 	Summary         string `json:"summary"`
@@ -24,6 +25,8 @@ func (s *NewsSerializer) Response() News {
 	response := News{
 		ID:              s.ID,
 		Title:           s.Title,
+		Author:          s.Author,
+		ImgSrc:          s.ImgSrc,
 		PublicationDate: s.PublicationDate.UTC().Format("2006-01-02T15:04:05.999Z"),
 		UpdatedDate:     s.UpdateDate.UTC().Format("2006-01-02T15:04:05.999Z"),
 		Summary:         s.Summary,

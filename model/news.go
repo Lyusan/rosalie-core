@@ -12,6 +12,7 @@ type News struct {
 	gorm.Model
 	Title           string
 	Author          string
+	ImgSrc          string
 	PublicationDate time.Time
 	UpdateDate      time.Time
 	Summary         string
