@@ -3,8 +3,8 @@
 ## Endpoints
 
 - [ ] Edition
-  - [ ] list editions
-  - [ ] retrieve edition
+  - [x] list editions
+  - [x] retrieve edition
   - [ ] list edition awards
   - [ ] create questions
     - [ ] server-side reCaptcha token validation

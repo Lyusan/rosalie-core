@@ -15,7 +15,8 @@ type Edition struct {
 	StartDate      time.Time
 	NominationDate time.Time
 	RewardingDate  time.Time
-	Awards 		   []Award
+	EndDate        time.Time
+	Awards         []Award
 }
 
 func FindManyEditions() ([]Edition, error) {

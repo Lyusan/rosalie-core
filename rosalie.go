@@ -79,6 +79,7 @@ func main() {
 	router := engine.Group("/v1")
 	routers.NewsRegister(router)
 	routers.CategorieRegister(router)
+	routers.EditionRegister(router)
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
