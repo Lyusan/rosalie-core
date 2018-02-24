@@ -15,9 +15,9 @@
   - [ ] retrieve movie
   - [ ] list movie articles
   - [ ] retrieve article
-- [ ] News
-  - [ ] list news
-  - [ ] retrieve news
+- [x] News
+  - [x] list news
+  - [x] retrieve news
 
 ## Database
 
