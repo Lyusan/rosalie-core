@@ -7,10 +7,10 @@
   - [x] retrieve edition
   - [ ] list edition awards
   - [ ] create questions
+  - [ ] list encounters
     - [ ] server-side reCaptcha token validation
 - [ ] Application
   - [ ] retrieve application
-  - [ ] list encounters
 - [ ] Movie
   - [ ] retrieve movie
   - [ ] list movie articles
@@ -18,6 +18,7 @@
 - [x] News
   - [x] list news
   - [x] retrieve news
+
 
 ## Database
 
