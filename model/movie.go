@@ -17,7 +17,6 @@ type Movie struct {
 	RewardingDate time.Time
 
 	Articles     []Article
-	Inteviews    []Interview
 	Applications []Application
 }
 

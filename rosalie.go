@@ -58,7 +58,7 @@ func testInsert(db *gorm.DB) {
 }
 
 func createSchema(db *gorm.DB) {
-	for _, model := range []interface{}{&model.Application{}, &model.Article{}, &model.Award{}, &model.Categorie{}, &model.Edition{}, &model.Interview{}, &model.Movie{}, &model.News{}, &model.Person{}, &model.Question{}} {
+	for _, model := range []interface{}{&model.Application{}, &model.Article{}, &model.Award{}, &model.Categorie{}, &model.Edition{}, &model.Movie{}, &model.News{}, &model.Person{}, &model.Question{}} {
 		db.DropTableIfExists(model)
 		db.CreateTable(model)
 	}
