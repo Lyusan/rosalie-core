@@ -1,19 +1,14 @@
 package model
 
 import (
-	"time"
-
 	"../utils"
 	"github.com/jinzhu/gorm"
 )
 
 type Question struct {
 	gorm.Model
-	FirstName     string
-	LastName      string
-	BirthDate     time.Time
-	Description   string
-	ImgUrl        string
+	Question      string
+	Email         string
 	Application   Application
 	ApplicationID int
 }
