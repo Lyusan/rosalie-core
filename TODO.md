@@ -6,7 +6,7 @@
   - [x] list editions
   - [x] retrieve edition
   - [ ] list edition awards
-  - [ ] create questions
+  - [x] create questions
   - [ ] list encounters
     - [ ] server-side reCaptcha token validation
 - [ ] Application
