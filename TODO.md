@@ -14,7 +14,7 @@
 - [ ] Movie
   - [ ] retrieve movie
   - [ ] list movie articles
-  - [ ] retrieve article
+  - [x] retrieve article
 - [x] News
   - [x] list news
   - [x] retrieve news
