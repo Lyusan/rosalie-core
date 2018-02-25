@@ -26,3 +26,9 @@ func FindQuestionByID(id int) (Question, error) {
 	err := db.First(&question, id).Error
 	return question, err
 }
+
+func SaveQuestions(question Question) (Question, error) {
+	db := utils.GetDB()
+	err := db.Create(&question).Error
+	return question, err
+}
