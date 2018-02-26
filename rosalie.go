@@ -49,12 +49,33 @@ func testInsert(db *gorm.DB) {
 		CategorieID: 1,
 	}
 	db.Create(&award2)
-	awardsResult := []model.Award{}
-	db.Find(&awardsResult)
-	for i, _ := range awardsResult {
-		db.Model(awardsResult[i]).Related(&awardsResult[i].Categorie)
+	// awardsResult := []model.Award{}
+	// db.Find(&awardsResult)
+	// for i, _ := range awardsResult {
+	// 	db.Model(awardsResult[i]).Related(&awardsResult[i].Categorie)
+	// }
+	// fmt.Println(awardsResult)
+	movie1 := model.Movie{
+		Title:       "Movie1",
+		Description: "Desc m1",
+		Date:        time.Now(),
+		Image:       "url",
+		Articles: []model.Article{
+			model.Article{
+				Title:           "Article1 m1",
+				Content:         "blabla",
+				UpdateDate:      time.Now(),
+				PublicationDate: time.Now(),
+			},
+			model.Article{
+				Title:           "Article1 m1",
+				Content:         "blabla",
+				UpdateDate:      time.Now(),
+				PublicationDate: time.Now(),
+			},
+		},
 	}
-	fmt.Println(awardsResult)
+	db.Create(&movie1)
 }
 
 func createSchema(db *gorm.DB) {

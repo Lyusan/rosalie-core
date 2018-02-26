@@ -12,8 +12,8 @@
 - [ ] Application
   - [ ] retrieve application
 - [ ] Movie
-  - [ ] retrieve movie
-  - [ ] list movie articles
+  - [x] retrieve movie
+  - [x] list movie articles
   - [x] retrieve article
 - [x] News
   - [x] list news
