@@ -82,6 +82,7 @@ func main() {
 	routers.EditionRegister(router)
 	routers.QuestionRegister(router)
 	routers.ArticleRegister(router)
+	routers.MovieRegister(router)
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "4000"
