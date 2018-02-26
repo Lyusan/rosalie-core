@@ -10,11 +10,10 @@ import (
 
 type Movie struct {
 	gorm.Model
-	Title         string
-	Description   string
-	Date          time.Time
-	Image         string
-	RewardingDate time.Time
+	Title       string
+	Description string
+	Date        time.Time
+	Image       string
 
 	Articles     []Article
 	Applications []Application
