@@ -8,10 +8,9 @@
   - [ ] list edition awards
   - [x] create questions
   - [ ] list encounters
-    - [ ] server-side reCaptcha token validation
 - [ ] Application
   - [ ] retrieve application
-- [ ] Movie
+- [x] Movie
   - [x] retrieve movie
   - [x] list movie articles
   - [x] retrieve article
@@ -23,3 +22,17 @@
 ## Database
 
 - [ ] images storing
+
+
+## Error management
+
+- [ ] Improve error message
+- [ ] Error gorm management
+
+## Security
+
+- [ ] Captcha token validation
+
+## Other
+
+- [ ] Email send from backend
