@@ -32,3 +32,14 @@ func FindMovieByID(id int) (Movie, error) {
 	err := db.First(&movie, id).Error
 	return movie, err
 }
+
+func FindMovieRelatedArticles(id int) ([]Article, error) {
+	db := utils.GetDB()
+	movie, err := FindMovieByID(id)
+	if err != nil {
+		return nil, err
+	}
+	var articles []Article
+	db.Model(&movie).Related(&articles)
+	return articles, err
+}
