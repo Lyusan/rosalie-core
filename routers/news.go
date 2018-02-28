@@ -27,12 +27,12 @@ func NewsList(c *gin.Context) {
 }
 
 func NewsByID(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, errors.New("Expect an integer for param id"))
 		return
 	}
-	news, err := model.FindNewsByID(id)
+	news, err := model.FindNewsByID(uint(id))
 	if err != nil {
 		c.JSON(http.StatusNotFound, errors.New("Item not found"))
 		return

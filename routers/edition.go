@@ -28,12 +28,12 @@ func EditionList(c *gin.Context) {
 }
 
 func EditionByID(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 16)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, errors.New("Expect an integer for param id"))
 		return
 	}
-	edition, err := model.FindEditionByID(id)
+	edition, err := model.FindEditionByID(uint(id))
 	if err != nil {
 		c.JSON(http.StatusNotFound, errors.New("Item not found"))
 		return
@@ -43,12 +43,12 @@ func EditionByID(c *gin.Context) {
 }
 
 func EditionListAward(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, errors.New("Expect an integer for param id"))
 		return
 	}
-	awards, err := model.FindEditionAwards(id)
+	awards, err := model.FindEditionAwards(uint(id))
 	if err != nil {
 		c.JSON(http.StatusNotFound, errors.New("Item not found"))
 		return

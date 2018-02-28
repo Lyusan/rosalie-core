@@ -26,7 +26,7 @@ type QuestionsPOST struct {
 
 type Question struct {
 	Question      string `json:"question"`
-	ApplicationID int    `json:"application_id"`
+	ApplicationID uint   `json:"application_id"`
 }
 
 func CreateQuestions(c *gin.Context) {
@@ -61,12 +61,12 @@ func QuestionList(c *gin.Context) {
 }
 
 func QuestionByID(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, errors.New("Expect an integer for param id"))
 		return
 	}
-	edition, err := model.FindEditionByID(id)
+	edition, err := model.FindEditionByID(uint(id))
 	if err != nil {
 		c.JSON(http.StatusNotFound, errors.New("Item not found"))
 		return

@@ -27,12 +27,12 @@ func CategorieList(c *gin.Context) {
 }
 
 func CategorieByID(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, errors.New("Expect an integer for param id"))
 		return
 	}
-	categorie, err := model.FindCategorieByID(id)
+	categorie, err := model.FindCategorieByID(uint(id))
 	if err != nil {
 		c.JSON(http.StatusNotFound, errors.New("Item not found"))
 		return
