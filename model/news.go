@@ -26,7 +26,7 @@ func FindManyNews() ([]News, error) {
 	return news, err
 }
 
-func FindNewsByID(id int) (News, error) {
+func FindNewsByID(id uint) (News, error) {
 	var news News
 	db := utils.GetDB()
 	err := db.First(&news, id).Error

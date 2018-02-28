@@ -17,7 +17,8 @@ type Edition struct {
 	RewardingDate  time.Time
 	EndDate        time.Time
 	NumberNominees int
-	Awards         []Award
+
+	Awards []Award
 }
 
 func FindManyEditions() ([]Edition, error) {
@@ -27,14 +28,14 @@ func FindManyEditions() ([]Edition, error) {
 	return editions, err
 }
 
-func FindEditionByID(id int) (Edition, error) {
+func FindEditionByID(id uint) (Edition, error) {
 	var edition Edition
 	db := utils.GetDB()
 	err := db.First(&edition, id).Error
 	return edition, err
 }
 
-func FindEditionAwards(id int) ([]Award, error) {
+func FindEditionAwards(id uint) ([]Award, error) {
 	var edition Edition
 	db := utils.GetDB()
 	err := db.First(&edition, id).Error

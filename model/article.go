@@ -15,7 +15,7 @@ type Article struct {
 	UpdateDate      time.Time
 	PublicationDate time.Time
 
-	MovieID int
+	MovieID uint
 }
 
 func FindManyArticles() ([]Article, error) {
@@ -25,7 +25,7 @@ func FindManyArticles() ([]Article, error) {
 	return articles, err
 }
 
-func FindArticleByID(id int) (Article, error) {
+func FindArticleByID(id uint) (Article, error) {
 	var article Article
 	db := utils.GetDB()
 	err := db.First(&article, id).Error

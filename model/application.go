@@ -7,13 +7,15 @@ import (
 
 type Application struct {
 	gorm.Model
-    AwardID       int
-	MoveID        int
-	PersonID      int
-	Questions     []Question
 	VotesNominees int
 	VotesWinner   int
-	Votes         []Vote
+
+	Votes     []Vote
+	Questions []Question
+
+	AwardID  uint
+	MovieID  uint
+	PersonID uint
 }
 
 func FindManyApplications() ([]Application, error) {
@@ -23,9 +25,23 @@ func FindManyApplications() ([]Application, error) {
 	return applications, err
 }
 
-func FindApplicationByID(id int) (Application, error) {
+func FindApplicationByID(id uint) (Application, error) {
 	var application Application
 	db := utils.GetDB()
 	err := db.First(&application, id).Error
 	return application, err
+}
+
+func (s *Application) FindRelatedMovie() Movie {
+	var movie Movie
+	db := utils.GetDB()
+	db.First(&movie, s.MovieID)
+	return movie
+}
+
+func (s *Application) FindRelatedPerson() Person {
+	var person Person
+	db := utils.GetDB()
+	db.First(&person, s.PersonID)
+	return person
 }

@@ -9,11 +9,12 @@ import (
 
 type Person struct {
 	gorm.Model
-	FirstName    string
-	LastName     string
-	BirthDate    time.Time
-	Description  string
-	ImgUrl       string
+	FirstName   string
+	LastName    string
+	BirthDate   time.Time
+	Description string
+	ImgUrl      string
+
 	Applications []Application
 }
 
@@ -24,7 +25,7 @@ func FindManyPersons() ([]Person, error) {
 	return persons, err
 }
 
-func FindPersonByID(id int) (Person, error) {
+func FindPersonByID(id uint) (Person, error) {
 	var person Person
 	db := utils.GetDB()
 	err := db.First(&person, id).Error

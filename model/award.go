@@ -8,9 +8,11 @@ import (
 
 type Award struct {
 	gorm.Model
-	CategorieID int
-	EditionID   int
+
 	Applications []Application
+
+	CategorieID uint
+	EditionID   uint
 }
 
 func FindManyAwards() ([]Award, error) {
@@ -20,9 +22,16 @@ func FindManyAwards() ([]Award, error) {
 	return awards, err
 }
 
-func FindAwardByID(id int) (Award, error) {
+func FindAwardByID(id uint) (Award, error) {
 	var award Award
 	db := utils.GetDB()
 	err := db.First(&award, id).Error
 	return award, err
+}
+
+func (s *Award) FindRelatedCategorie() Categorie {
+	var categorie Categorie
+	db := utils.GetDB()
+	db.First(&categorie, s.CategorieID)
+	return categorie
 }

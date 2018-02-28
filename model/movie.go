@@ -26,16 +26,16 @@ func FindManyMovies() ([]Movie, error) {
 	return movies, err
 }
 
-func FindMovieByID(id int) (Movie, error) {
+func FindMovieByID(id uint) (Movie, error) {
 	var movie Movie
 	db := utils.GetDB()
 	err := db.First(&movie, id).Error
 	return movie, err
 }
 
-func FindMovieRelatedArticles(id int) ([]Article, error) {
+func FindMovieRelatedArticles(id uint) ([]Article, error) {
 	db := utils.GetDB()
-	movie, err := FindMovieByID(id)
+	movie, err := FindMovieByID(uint(id))
 	if err != nil {
 		return nil, err
 	}

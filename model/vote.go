@@ -7,10 +7,11 @@ import (
 
 type Vote struct {
 	gorm.Model
-	Value         int `gorm:"DEFAULT:1"`
-	Type          string
-	Email         string
-	ApplicationID int
+	Value int `gorm:"DEFAULT:1"`
+	Type  string
+	Email string
+
+	ApplicationID uint
 }
 
 func FindManyVotes() ([]Vote, error) {
@@ -20,7 +21,7 @@ func FindManyVotes() ([]Vote, error) {
 	return votes, err
 }
 
-func FindVoteByID(id int) (Vote, error) {
+func FindVoteByID(id uint) (Vote, error) {
 	var vote Vote
 	db := utils.GetDB()
 	err := db.First(&vote, id).Error

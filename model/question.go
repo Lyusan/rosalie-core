@@ -7,9 +7,10 @@ import (
 
 type Question struct {
 	gorm.Model
-	Question      string
-	Email         string
-	ApplicationID int
+	Question string
+	Email    string
+
+	ApplicationID uint
 }
 
 func FindManyQuestions() ([]Question, error) {
@@ -19,7 +20,7 @@ func FindManyQuestions() ([]Question, error) {
 	return questions, err
 }
 
-func FindQuestionByID(id int) (Question, error) {
+func FindQuestionByID(id uint) (Question, error) {
 	var question Question
 	db := utils.GetDB()
 	err := db.First(&question, id).Error

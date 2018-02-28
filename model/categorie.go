@@ -9,7 +9,8 @@ type Categorie struct {
 	gorm.Model
 	Name        string
 	Description string
-	Awards      []Award
+
+	Awards []Award
 }
 
 func FindManyCategories() ([]Categorie, error) {
@@ -19,7 +20,7 @@ func FindManyCategories() ([]Categorie, error) {
 	return categories, err
 }
 
-func FindCategorieByID(id int) (Categorie, error) {
+func FindCategorieByID(id uint) (Categorie, error) {
 	var categorie Categorie
 	db := utils.GetDB()
 	err := db.First(&categorie, id).Error
