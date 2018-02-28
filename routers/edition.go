@@ -14,6 +14,7 @@ import (
 func EditionRegister(router *gin.RouterGroup) {
 	router.GET("/editions", EditionList)
 	router.GET("/editions/:id", EditionByID)
+	router.GET("/editions/:id/awards", EditionListAward)
 }
 
 func EditionList(c *gin.Context) {
@@ -39,4 +40,20 @@ func EditionByID(c *gin.Context) {
 	}
 	serializer := serializer.EditionSerializer{c, edition}
 	c.JSON(http.StatusOK, serializer.Response())
+}
+
+func EditionListAward(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, errors.New("Expect an integer for param id"))
+		return
+	}
+	awards, err := model.FindEditionAwards(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, errors.New("Item not found"))
+		return
+	}
+	serializer := serializer.AwardsSerializer{c, awards}
+	c.JSON(http.StatusOK, serializer.Response())
+
 }

@@ -16,6 +16,7 @@ type Edition struct {
 	NominationDate time.Time
 	RewardingDate  time.Time
 	EndDate        time.Time
+	NumberNominees int
 	Awards         []Award
 }
 
@@ -31,4 +32,19 @@ func FindEditionByID(id int) (Edition, error) {
 	db := utils.GetDB()
 	err := db.First(&edition, id).Error
 	return edition, err
+}
+
+func FindEditionAwards(id int) ([]Award, error) {
+	var edition Edition
+	db := utils.GetDB()
+	err := db.First(&edition, id).Error
+	if err != nil {
+		return nil, err
+	}
+	var awards []Award
+	err = db.Find(&edition).Related(&awards).Error
+	if err != nil {
+		return nil, err
+	}
+	return awards, err
 }
