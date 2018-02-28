@@ -6,6 +6,7 @@ import (
 	"../model"
 	"../utils"
 
+	_ "github.com/jinzhu/gorm"
 	"github.com/qor/admin"
 
 	_ "github.com/joho/godotenv/autoload"

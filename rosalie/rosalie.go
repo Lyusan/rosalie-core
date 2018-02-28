@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"./model"
-	"./routers"
-	"./utils"
+	"../model"
+	"../routers"
+	"../utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"

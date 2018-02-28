@@ -3,7 +3,7 @@ all: rosalie
 
 .PHONY: rosalie
 rosalie:
-	go build -v rosalie.go
+	go build -v rosalie/rosalie.go
 
 .PHONY: rosalie-static
 rosalie-static: export CGO_ENABLED=0
