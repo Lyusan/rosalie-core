@@ -9,7 +9,7 @@ type Question struct {
 	ID            uint   `json:"id"`
 	Question      string `json:"question"`
 	Email         string `json:"email"`
-	ApplicationID int    `json:"application_id"`
+	ApplicationID uint   `json:"application_id"`
 }
 
 type QuestionSerializer struct {
