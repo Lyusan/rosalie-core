@@ -7,12 +7,11 @@ import (
 	"time"
 
 	"./model"
+	"./utils"
 
 	"github.com/qor/admin"
-	_ "github.com/qor/qor"
 
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -80,16 +79,18 @@ func testInsert(db *gorm.DB) {
 }
 
 func createSchema(db *gorm.DB, admin *admin.Admin) {
-	for _, model := range []interface{}{&model.Application{}, &model.Article{}, &model.Award{}, &model.Categorie{}, &model.Edition{}, &model.Movie{}, &model.News{}, &model.Person{}, &model.Question{}} {
+	slice := []interface{}{&model.Application{}, &model.Article{}, &model.Award{}, &model.Categorie{}, &model.Edition{}, &model.Movie{}, &model.News{}, &model.Person{}, &model.Question{}, &model.Vote{}}
+	for _, model := range slice {
 		db.DropTableIfExists(model)
 		db.CreateTable(model)
+	}
+	for _, model := range slice {
 		admin.AddResource(model)
 	}
 }
 
 func main() {
-	//db, err := utils.InitDB()
-	db, err := gorm.Open("sqlite3", "demo.db")
+	db, err := utils.InitDB()
 	if err != nil {
 		log.Fatalf("DB: Cannot connect: %s\n", err)
 	}
