@@ -3,14 +3,14 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
+	"os"
 	"time"
 
 	"./model"
+	"./routers"
 	"./utils"
 
-	"github.com/qor/admin"
-
+	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -78,14 +78,11 @@ func testInsert(db *gorm.DB) {
 	db.Create(&movie1)
 }
 
-func createSchema(db *gorm.DB, admin *admin.Admin) {
-	slice := []interface{}{&model.Application{}, &model.Article{}, &model.Award{}, &model.Categorie{}, &model.Edition{}, &model.Movie{}, &model.News{}, &model.Person{}, &model.Question{}, &model.Vote{}}
+func createSchema(db *gorm.DB) {
+	slice := model.GetModels()
 	for _, model := range slice {
 		db.DropTableIfExists(model)
-		db.CreateTable(model)
-	}
-	for _, model := range slice {
-		admin.AddResource(model)
+		db.AutoMigrate(model)
 	}
 }
 
@@ -96,32 +93,22 @@ func main() {
 	}
 	defer db.Close()
 	db.LogMode(true)
-	admin := admin.New(&admin.AdminConfig{DB: db})
 	// admin := admin.New(&qor.Config{DB: db})
-	createSchema(db, admin)
+	createSchema(db)
 	time.Sleep(2 * time.Second)
 	testInsert(db)
 
-	// engine := gin.Default()
-	// router := engine.Group("/v1")
-	// routers.NewsRegister(router)
-	// routers.CategorieRegister(router)
-	// routers.EditionRegister(router)
-	// routers.QuestionRegister(router)
-	// routers.ArticleRegister(router)
-	// routers.MovieRegister(router)
-	// port := os.Getenv("PORT")
-	// if len(port) == 0 {
-	// 	port = "4000"
-	// }
-	//engine.Run(fmt.Sprintf(":%s", port))
-
-	// initalize an HTTP request multiplexer
-	mux := http.NewServeMux()
-
-	// Mount admin interface to mux
-	admin.MountTo("/admin", mux)
-
-	fmt.Println("Listening on: 9000")
-	http.ListenAndServe(":9000", mux)
+	engine := gin.Default()
+	router := engine.Group("/v1")
+	routers.NewsRegister(router)
+	routers.CategorieRegister(router)
+	routers.EditionRegister(router)
+	routers.QuestionRegister(router)
+	routers.ArticleRegister(router)
+	routers.MovieRegister(router)
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "4000"
+	}
+	engine.Run(fmt.Sprintf(":%s", port))
 }
