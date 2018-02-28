@@ -28,8 +28,8 @@ func (s *AwardSerializer) Response() Award {
 	winner := winnerSerializer.Response()
 	response := Award{
 		ID:            s.ID,
-		CategorieName: s.Categorie.Name,
-		CategorieDesc: s.Categorie.Description,
+		CategorieName: s.FindRelatedCategorie().Name,
+		CategorieDesc: s.FindRelatedCategorie().Description,
 		Candidates:    candidates,
 		Nominees:      nominees,
 		Winner:        winner,

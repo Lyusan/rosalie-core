@@ -17,9 +17,9 @@ type ApplicationSerializer struct {
 }
 
 func (s *ApplicationSerializer) Response() Application {
-	movieSerializer := MovieSerializer{s.C, s.Movie}
+	movieSerializer := MovieSerializer{s.C, s.FindRelatedMovie()}
 	movie := movieSerializer.Response()
-	personSerializer := PersonSerializer{s.C, s.Person}
+	personSerializer := PersonSerializer{s.C, s.FindRelatedPerson()}
 	person := personSerializer.Response()
 	response := Application{
 		ID:     s.ID,
