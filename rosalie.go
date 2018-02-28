@@ -3,15 +3,16 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
+	"net/http"
 	"time"
 
 	"./model"
-	"./routers"
-	"./utils"
 
-	"github.com/gin-gonic/gin"
+	"github.com/qor/admin"
+	_ "github.com/qor/qor"
+
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -78,35 +79,48 @@ func testInsert(db *gorm.DB) {
 	db.Create(&movie1)
 }
 
-func createSchema(db *gorm.DB) {
+func createSchema(db *gorm.DB, admin *admin.Admin) {
 	for _, model := range []interface{}{&model.Application{}, &model.Article{}, &model.Award{}, &model.Categorie{}, &model.Edition{}, &model.Movie{}, &model.News{}, &model.Person{}, &model.Question{}} {
 		db.DropTableIfExists(model)
 		db.CreateTable(model)
+		admin.AddResource(model)
 	}
 }
 
 func main() {
-	db, err := utils.InitDB()
+	//db, err := utils.InitDB()
+	db, err := gorm.Open("sqlite3", "demo.db")
 	if err != nil {
 		log.Fatalf("DB: Cannot connect: %s\n", err)
 	}
 	defer db.Close()
 	db.LogMode(true)
-	createSchema(db)
+	admin := admin.New(&admin.AdminConfig{DB: db})
+	// admin := admin.New(&qor.Config{DB: db})
+	createSchema(db, admin)
 	time.Sleep(2 * time.Second)
 	testInsert(db)
 
-	engine := gin.Default()
-	router := engine.Group("/v1")
-	routers.NewsRegister(router)
-	routers.CategorieRegister(router)
-	routers.EditionRegister(router)
-	routers.QuestionRegister(router)
-	routers.ArticleRegister(router)
-	routers.MovieRegister(router)
-	port := os.Getenv("PORT")
-	if len(port) == 0 {
-		port = "4000"
-	}
-	engine.Run(fmt.Sprintf(":%s", port))
+	// engine := gin.Default()
+	// router := engine.Group("/v1")
+	// routers.NewsRegister(router)
+	// routers.CategorieRegister(router)
+	// routers.EditionRegister(router)
+	// routers.QuestionRegister(router)
+	// routers.ArticleRegister(router)
+	// routers.MovieRegister(router)
+	// port := os.Getenv("PORT")
+	// if len(port) == 0 {
+	// 	port = "4000"
+	// }
+	//engine.Run(fmt.Sprintf(":%s", port))
+
+	// initalize an HTTP request multiplexer
+	mux := http.NewServeMux()
+
+	// Mount admin interface to mux
+	admin.MountTo("/admin", mux)
+
+	fmt.Println("Listening on: 9000")
+	http.ListenAndServe(":9000", mux)
 }
