@@ -33,7 +33,7 @@ either export them in your shell, or simply write them in an `.env` file, loaded
 |`DB_NAME`|The name of the database|:heavy_check_mark:|
 |`DB_USERNAME`|Username used for the database|:heavy_check_mark:️|
 |`DB_PASSWORD`|Password used for the database|:heavy_check_mark: [^1]|
-|`DB_URL`|Url of the database (defaults to localhost)|defaults to `localhost`|
+|`DB_HOST`|Can be an url (`locahost`), or a path to a unix socket (`/var/run/postgres`)|defaults to `localhost`|
 |`PORT`|Port the application will listen to|defaults to `4000`|
 
 

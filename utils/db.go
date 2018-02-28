@@ -10,19 +10,19 @@ import (
 
 var DB *gorm.DB
 
-func InitDB() (*gorm.DB, error ) {
-	dburl := os.Getenv("DB_URL")
-	if len(dburl) == 0 {
-		dburl = "localhost"
+func InitDB() (*gorm.DB, error) {
+	host := os.Getenv("DB_HOST")
+	if len(host) == 0 {
+		host = "localhost"
 	}
 	username := os.Getenv("DB_USERNAME")
 	dbname := os.Getenv("DB_NAME")
 	password := os.Getenv("DB_PASSWORD")
 	loginString := fmt.Sprintf("host=%s dbname=%s user=%s password=%s sslmode=disable",
-		dburl, dbname, username, password)
+		host, dbname, username, password)
 	db, err := gorm.Open("postgres", loginString)
 	if err != nil {
-    return nil, err
+		return nil, err
 	}
 	DB = db
 	return db, nil
