@@ -15,7 +15,6 @@ type Article struct {
 	UpdateDate      time.Time
 	PublicationDate time.Time
 
-	Movie   Movie
 	MovieID int
 }
 

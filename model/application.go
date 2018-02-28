@@ -7,11 +7,8 @@ import (
 
 type Application struct {
 	gorm.Model
-	Award         Award
-	AwardID       int
-	Movie         Movie
+    AwardID       int
 	MoveID        int
-	Person        Person
 	PersonID      int
 	Questions     []Question
 	VotesNominees int

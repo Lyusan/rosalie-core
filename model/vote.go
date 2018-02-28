@@ -10,7 +10,6 @@ type Vote struct {
 	Value         int `gorm:"DEFAULT:1"`
 	Type          string
 	Email         string
-	Application   Application
 	ApplicationID int
 }
 

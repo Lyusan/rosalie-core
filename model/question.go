@@ -9,7 +9,6 @@ type Question struct {
 	gorm.Model
 	Question      string
 	Email         string
-	Application   Application
 	ApplicationID int
 }
 

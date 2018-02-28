@@ -8,9 +8,7 @@ import (
 
 type Award struct {
 	gorm.Model
-	Categorie   Categorie
 	CategorieID int
-	Edition     Edition
 	EditionID   int
 	Applications []Application
 }
