@@ -36,3 +36,10 @@ func (s *Award) FindRelatedCategorie() Categorie {
 	db.First(&categorie, s.CategorieID)
 	return categorie
 }
+
+func (s *Award) FindRelatedEdition() Edition {
+	var edition Edition
+	db := utils.GetDB()
+	db.First(&edition, s.EditionID)
+	return edition
+}
