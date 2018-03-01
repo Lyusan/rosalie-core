@@ -92,7 +92,6 @@ func main() {
 		log.Fatalf("DB: Cannot connect: %s\n", err)
 	}
 	defer db.Close()
-	db.LogMode(true)
 	// admin := admin.New(&qor.Config{DB: db})
 	createSchema(db)
 	time.Sleep(2 * time.Second)
