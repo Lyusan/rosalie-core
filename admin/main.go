@@ -89,7 +89,8 @@ func addApplication(Admin *admin.Admin) {
 }
 
 func addArticle(Admin *admin.Admin) {
-	Admin.AddResource(&model.Article{})
+	article := Admin.AddResource(&model.Article{})
+	article.Meta(&admin.Meta{Name: "Content", Type: "text"})
 }
 
 func addAward(Admin *admin.Admin) {
@@ -97,24 +98,29 @@ func addAward(Admin *admin.Admin) {
 }
 
 func addCategorie(Admin *admin.Admin) {
-	Admin.AddResource(&model.Categorie{})
+	categorie := Admin.AddResource(&model.Categorie{})
+	categorie.Meta(&admin.Meta{Name: "Description", Type: "text"})
 }
 func addEdition(Admin *admin.Admin) {
 	Admin.AddResource(&model.Edition{})
 }
 
 func addMovie(Admin *admin.Admin) {
-	Admin.AddResource(&model.Movie{})
+	movie := Admin.AddResource(&model.Movie{})
+	movie.Meta(&admin.Meta{Name: "Description", Type: "text"})
 }
 
 func addNews(Admin *admin.Admin) {
-	Admin.AddResource(&model.News{})
+	news := Admin.AddResource(&model.News{})
+	news.Meta(&admin.Meta{Name: "Summary", Type: "text"})
+	news.Meta(&admin.Meta{Name: "Content", Type: "text"})
 }
 
 func addPerson(Admin *admin.Admin) {
 	person := Admin.AddResource(&model.Person{})
 	person.NewAttrs("-Applications")
 	person.EditAttrs("-Applications")
+	person.Meta(&admin.Meta{Name: "Description", Type: "text"})
 }
 
 func addQuestion(Admin *admin.Admin) {
