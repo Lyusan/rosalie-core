@@ -112,7 +112,9 @@ func addNews(Admin *admin.Admin) {
 }
 
 func addPerson(Admin *admin.Admin) {
-	Admin.AddResource(&model.Person{})
+	person := Admin.AddResource(&model.Person{})
+	person.NewAttrs("-Applications")
+	person.EditAttrs("-Applications")
 }
 
 func addQuestion(Admin *admin.Admin) {
