@@ -7,6 +7,8 @@ rosalie:
 	go build -v rosalie/main.go
 admin:
 	go build -v admin/main.go
+resetdb:
+	go build -v admin/main.go
 
 .PHONY: rosalie-static
 rosalie-static: export CGO_ENABLED=0
