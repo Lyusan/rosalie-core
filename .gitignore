@@ -1,3 +1,4 @@
 rosalie.exe
 ^rosalie$
 .env
+debug
