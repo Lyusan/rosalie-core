@@ -8,6 +8,7 @@ import (
 
 type Award struct {
 	gorm.Model
+	NumberNominees int
 
 	Applications []Application
 

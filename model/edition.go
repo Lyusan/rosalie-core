@@ -16,7 +16,6 @@ type Edition struct {
 	NominationDate time.Time
 	RewardingDate  time.Time
 	EndDate        time.Time
-	NumberNominees int
 
 	Awards []Award
 }
