@@ -1,9 +1,9 @@
 package main
 
 import (
-	"net/http"
-	"log"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
 
 	"../model"
@@ -11,6 +11,7 @@ import (
 
 	_ "github.com/jinzhu/gorm"
 	"github.com/qor/admin"
+	"github.com/qor/roles"
 
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -55,36 +56,36 @@ func addApplication(Admin *admin.Admin) {
 	adminApplication.EditAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID")
 	adminApplication.Meta(&admin.Meta{Name: "MovieID", Label: "Movie", Type: "select_one",
 		Config: &admin.SelectOneConfig{
-		  Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
-			var movies []model.Movie
-			context.GetDB().Find(&movies)
-	
-			for _, n := range movies {
-			  idStr := fmt.Sprintf("%d", n.ID)
-			  var option = []string{idStr, n.Title}
-			  options = append(options, option)
-			}
-	
-			return options
-		  },
+			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
+				var movies []model.Movie
+				context.GetDB().Find(&movies)
+
+				for _, n := range movies {
+					idStr := fmt.Sprintf("%d", n.ID)
+					var option = []string{idStr, n.Title}
+					options = append(options, option)
+				}
+
+				return options
+			},
 		},
-	  })
-	  adminApplication.Meta(&admin.Meta{Name: "PersonID", Label: "Person", Type: "select_one",
+	})
+	adminApplication.Meta(&admin.Meta{Name: "PersonID", Label: "Person", Type: "select_one",
 		Config: &admin.SelectOneConfig{
-		  Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
-			var people []model.Person
-			context.GetDB().Find(&people)
-	
-			for _, n := range people {
-			  idStr := fmt.Sprintf("%d", n.ID)
-			  var option = []string{idStr, n.GetFullName()}
-			  options = append(options, option)
-			}
-	
-			return options
-		  },
+			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
+				var people []model.Person
+				context.GetDB().Find(&people)
+
+				for _, n := range people {
+					idStr := fmt.Sprintf("%d", n.ID)
+					var option = []string{idStr, n.GetFullName()}
+					options = append(options, option)
+				}
+
+				return options
+			},
 		},
-	  })
+	})
 }
 
 func addArticle(Admin *admin.Admin) {
@@ -115,9 +116,13 @@ func addPerson(Admin *admin.Admin) {
 }
 
 func addQuestion(Admin *admin.Admin) {
-	Admin.AddResource(&model.Question{})
+	Admin.AddResource(&model.Question{}, &admin.Config{
+		Permission: roles.Deny(roles.Delete, roles.Anyone).Deny(roles.Update, roles.Anyone).Deny(roles.Create, roles.Anyone),
+	})
 }
 
 func addVote(Admin *admin.Admin) {
-	Admin.AddResource(&model.Vote{})
+	Admin.AddResource(&model.Vote{}, &admin.Config{
+		Permission: roles.Deny(roles.Delete, roles.Anyone).Deny(roles.Update, roles.Anyone).Deny(roles.Create, roles.Anyone),
+	})
 }
