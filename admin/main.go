@@ -94,7 +94,9 @@ func addArticle(Admin *admin.Admin) {
 }
 
 func addAward(Admin *admin.Admin) {
-	Admin.AddResource(&model.Award{})
+	award := Admin.AddResource(&model.Award{})
+	award.NewAttrs("-Applications")
+	award.EditAttrs("-Applications")
 }
 
 func addCategorie(Admin *admin.Admin) {
