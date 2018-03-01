@@ -11,7 +11,7 @@ type Award struct {
 	CategorieDesc string        `json:"categorie_desc"`
 	Candidates    []Application `json:"candidates"`
 	Nominees      []Application `json:"nominees"`
-	Winner        []Application `json:"winner"`
+	Winner        []Application `json:"winners"`
 }
 
 type AwardSerializer struct {
