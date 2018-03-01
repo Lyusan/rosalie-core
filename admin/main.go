@@ -102,7 +102,10 @@ func addAward(Admin *admin.Admin) {
 func addCategorie(Admin *admin.Admin) {
 	categorie := Admin.AddResource(&model.Categorie{})
 	categorie.Meta(&admin.Meta{Name: "Description", Type: "text"})
+	categorie.NewAttrs("-Awards")
+	categorie.EditAttrs("-Awards")
 }
+
 func addEdition(Admin *admin.Admin) {
 	Admin.AddResource(&model.Edition{})
 }
