@@ -51,10 +51,10 @@ func addAll(Admin *admin.Admin) {
 }
 
 func addApplication(Admin *admin.Admin) {
-	adminApplication := Admin.AddResource(&model.Application{})
-	adminApplication.NewAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID")
-	adminApplication.EditAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID")
-	adminApplication.Meta(&admin.Meta{Name: "MovieID", Label: "Movie", Type: "select_one",
+	application := Admin.AddResource(&model.Application{})
+	application.NewAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID", "AwardID")
+	application.EditAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID", "AwardID")
+	application.Meta(&admin.Meta{Name: "MovieID", Label: "Movie", Type: "select_one",
 		Config: &admin.SelectOneConfig{
 			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
 				var movies []model.Movie
@@ -70,7 +70,7 @@ func addApplication(Admin *admin.Admin) {
 			},
 		},
 	})
-	adminApplication.Meta(&admin.Meta{Name: "PersonID", Label: "Person", Type: "select_one",
+	application.Meta(&admin.Meta{Name: "PersonID", Label: "Person", Type: "select_one",
 		Config: &admin.SelectOneConfig{
 			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
 				var people []model.Person
@@ -86,6 +86,23 @@ func addApplication(Admin *admin.Admin) {
 			},
 		},
 	})
+	application.Meta(&admin.Meta{Name: "AwardID", Label: "Award", Type: "select_one",
+		Config: &admin.SelectOneConfig{
+			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
+				var people []model.Award
+				context.GetDB().Find(&people)
+
+				for _, n := range people {
+					idStr := fmt.Sprintf("%d", n.ID)
+					var option = []string{idStr, n.FindRelatedEdition().Name + " " + n.FindRelatedCategorie().Name}
+					options = append(options, option)
+				}
+
+				return options
+			},
+		},
+	})
+
 }
 
 func addArticle(Admin *admin.Admin) {
@@ -97,6 +114,38 @@ func addAward(Admin *admin.Admin) {
 	award := Admin.AddResource(&model.Award{})
 	award.NewAttrs("-Applications")
 	award.EditAttrs("-Applications")
+	award.Meta(&admin.Meta{Name: "CategorieID", Label: "Categorie", Type: "select_one",
+		Config: &admin.SelectOneConfig{
+			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
+				var categories []model.Categorie
+				context.GetDB().Find(&categories)
+
+				for _, n := range categories {
+					idStr := fmt.Sprintf("%d", n.ID)
+					var option = []string{idStr, n.Name}
+					options = append(options, option)
+				}
+
+				return options
+			},
+		},
+	})
+	award.Meta(&admin.Meta{Name: "EditionID", Label: "Edition", Type: "select_one",
+		Config: &admin.SelectOneConfig{
+			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
+				var editions []model.Edition
+				context.GetDB().Find(&editions)
+
+				for _, n := range editions {
+					idStr := fmt.Sprintf("%d", n.ID)
+					var option = []string{idStr, n.Name}
+					options = append(options, option)
+				}
+
+				return options
+			},
+		},
+	})
 }
 
 func addCategorie(Admin *admin.Admin) {
