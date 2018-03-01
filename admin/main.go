@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"log"
 	"fmt"
+	"os"
 
 	"../model"
 	"../utils"
@@ -66,5 +67,10 @@ func main() {
 
 	// Mount admin interface to mux
 	Admin.MountTo("/admin", mux)
-	http.ListenAndServe(":9000", mux)
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "9000"
+	}
+
+	http.ListenAndServe(fmt.Sprintf(":%s", port), mux)
 }
