@@ -20,11 +20,11 @@ type AwardSerializer struct {
 }
 
 func (s *AwardSerializer) Response() Award {
-	candidatesSerializer := ApplicationsSerializer{s.C, s.Applications}
+	candidatesSerializer := ApplicationsSerializer{s.C, s.FindRelatedCandidates()}
 	candidates := candidatesSerializer.Response()
-	nomineesSerializer := ApplicationsSerializer{s.C, s.Applications}
+	nomineesSerializer := ApplicationsSerializer{s.C, s.FindRelatedNominees()}
 	nominees := nomineesSerializer.Response()
-	winnerSerializer := ApplicationsSerializer{s.C, s.Applications}
+	winnerSerializer := ApplicationsSerializer{s.C, s.FindRelatedWinner()}
 	winner := winnerSerializer.Response()
 	response := Award{
 		ID:            s.ID,
