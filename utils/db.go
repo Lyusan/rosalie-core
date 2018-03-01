@@ -25,6 +25,7 @@ func InitDB() (*gorm.DB, error) {
 		return nil, err
 	}
 	DB = db
+	db.LogMode(true)
 	return db, nil
 }
 
