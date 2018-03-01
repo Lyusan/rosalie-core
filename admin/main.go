@@ -107,6 +107,8 @@ func addEdition(Admin *admin.Admin) {
 
 func addMovie(Admin *admin.Admin) {
 	movie := Admin.AddResource(&model.Movie{})
+	movie.NewAttrs("-Applications")
+	movie.EditAttrs("-Applications")
 	movie.Meta(&admin.Meta{Name: "Description", Type: "text"})
 }
 
