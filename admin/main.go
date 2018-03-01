@@ -21,14 +21,38 @@ func main() {
 		log.Fatalf("DB: Cannot connect: %s\n", err)
 	}
 	Admin := admin.New(&admin.AdminConfig{DB: db})
-	// slice := model.GetModels()
-	// for _, model := range slice {
-	// 	admin.AddResource(model)
-	// }
+	addAll(Admin)
+
+	// initalize an HTTP request multiplexer
+	mux := http.NewServeMux()
+
+	// Mount admin interface to mux
+	Admin.MountTo("/admin", mux)
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "9000"
+	}
+
+	http.ListenAndServe(fmt.Sprintf(":%s", port), mux)
+}
+
+func addAll(Admin *admin.Admin) {
+	addApplication(Admin)
+	addArticle(Admin)
+	addAward(Admin)
+	addCategorie(Admin)
+	addEdition(Admin)
+	addMovie(Admin)
+	addNews(Admin)
+	addPerson(Admin)
+	addQuestion(Admin)
+	addVote(Admin)
+}
+
+func addApplication(Admin *admin.Admin) {
 	adminApplication := Admin.AddResource(&model.Application{})
-	Admin.AddResource(&model.Movie{})
-	Admin.AddResource(&model.Person{})
 	adminApplication.NewAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID")
+	adminApplication.EditAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID")
 	adminApplication.Meta(&admin.Meta{Name: "MovieID", Label: "Movie", Type: "select_one",
 		Config: &admin.SelectOneConfig{
 		  Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
@@ -53,7 +77,7 @@ func main() {
 	
 			for _, n := range people {
 			  idStr := fmt.Sprintf("%d", n.ID)
-			  var option = []string{idStr, n.FirstName, n.LastName}
+			  var option = []string{idStr, n.GetFullName()}
 			  options = append(options, option)
 			}
 	
@@ -61,16 +85,39 @@ func main() {
 		  },
 		},
 	  })
+}
 
-	// initalize an HTTP request multiplexer
-	mux := http.NewServeMux()
+func addArticle(Admin *admin.Admin) {
+	Admin.AddResource(&model.Article{})
+}
 
-	// Mount admin interface to mux
-	Admin.MountTo("/admin", mux)
-	port := os.Getenv("PORT")
-	if len(port) == 0 {
-		port = "9000"
-	}
+func addAward(Admin *admin.Admin) {
+	Admin.AddResource(&model.Award{})
+}
 
-	http.ListenAndServe(fmt.Sprintf(":%s", port), mux)
+func addCategorie(Admin *admin.Admin) {
+	Admin.AddResource(&model.Categorie{})
+}
+func addEdition(Admin *admin.Admin) {
+	Admin.AddResource(&model.Edition{})
+}
+
+func addMovie(Admin *admin.Admin) {
+	Admin.AddResource(&model.Movie{})
+}
+
+func addNews(Admin *admin.Admin) {
+	Admin.AddResource(&model.News{})
+}
+
+func addPerson(Admin *admin.Admin) {
+	Admin.AddResource(&model.Person{})
+}
+
+func addQuestion(Admin *admin.Admin) {
+	Admin.AddResource(&model.Question{})
+}
+
+func addVote(Admin *admin.Admin) {
+	Admin.AddResource(&model.Vote{})
 }

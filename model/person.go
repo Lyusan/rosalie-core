@@ -31,3 +31,7 @@ func FindPersonByID(id uint) (Person, error) {
 	err := db.First(&person, id).Error
 	return person, err
 }
+
+func (s Person) GetFullName() string {
+	return s.FirstName + " " + s.LastName
+}
