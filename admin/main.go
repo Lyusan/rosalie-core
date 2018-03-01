@@ -156,7 +156,9 @@ func addCategorie(Admin *admin.Admin) {
 }
 
 func addEdition(Admin *admin.Admin) {
-	Admin.AddResource(&model.Edition{})
+	edition := Admin.AddResource(&model.Edition{})
+	edition.NewAttrs("-Awards")
+	edition.EditAttrs("-Awards")
 }
 
 func addMovie(Admin *admin.Admin) {
