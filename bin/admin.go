@@ -11,7 +11,6 @@ import (
 
 	_ "github.com/jinzhu/gorm"
 	"github.com/qor/admin"
-	"github.com/qor/qor"
 	"github.com/qor/roles"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -54,7 +53,6 @@ func addAll(Admin *admin.Admin) {
 func addApplication(Admin *admin.Admin) {
 	application := Admin.AddResource(&model.Application{})
 	application.NewAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID", "AwardID")
-	application.ShowAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID", "AwardID")
 	application.EditAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID", "AwardID")
 	application.Meta(&admin.Meta{Name: "MovieID", Label: "Movie", Type: "select_one",
 		Config: &admin.SelectOneConfig{
@@ -70,15 +68,6 @@ func addApplication(Admin *admin.Admin) {
 
 				return options
 			},
-		},
-		FormattedValuer: func(resource interface{}, context *qor.Context) (result interface{}) {
-			var movie model.Movie
-			if application, ok := resource.(*model.Application); ok {
-				context.GetDB().Find(&movie, application.MovieID)
-			} else {
-				return "ERROR"
-			}
-			return movie.Title
 		},
 	})
 	application.Meta(&admin.Meta{Name: "PersonID", Label: "Person", Type: "select_one",
@@ -96,15 +85,6 @@ func addApplication(Admin *admin.Admin) {
 				return options
 			},
 		},
-		FormattedValuer: func(resource interface{}, context *qor.Context) (result interface{}) {
-			var person model.Person
-			if application, ok := resource.(*model.Application); ok {
-				context.GetDB().Find(&person, application.PersonID)
-			} else {
-				return "ERROR"
-			}
-			return person.GetFullName()
-		},
 	})
 	application.Meta(&admin.Meta{Name: "AwardID", Label: "Award", Type: "select_one",
 		Config: &admin.SelectOneConfig{
@@ -114,21 +94,12 @@ func addApplication(Admin *admin.Admin) {
 
 				for _, n := range people {
 					idStr := fmt.Sprintf("%d", n.ID)
-					var option = []string{idStr, n.FindRelatedEdition().Name + " - " + n.FindRelatedCategorie().Name}
+					var option = []string{idStr, n.FindRelatedEdition().Name + " " + n.FindRelatedCategorie().Name}
 					options = append(options, option)
 				}
 
 				return options
 			},
-		},
-		FormattedValuer: func(resource interface{}, context *qor.Context) (result interface{}) {
-			var award model.Award
-			if application, ok := resource.(*model.Application); ok {
-				context.GetDB().Find(&award, application.PersonID)
-			} else {
-				return "ERROR"
-			}
-			return award.FindRelatedEdition().Name + " - " + award.FindRelatedCategorie().Name
 		},
 	})
 
@@ -158,15 +129,6 @@ func addAward(Admin *admin.Admin) {
 				return options
 			},
 		},
-		FormattedValuer: func(resource interface{}, context *qor.Context) (result interface{}) {
-			var categorie model.Categorie
-			if award, ok := resource.(*model.Award); ok {
-				context.GetDB().Find(&categorie, award.CategorieID)
-			} else {
-				return "ERROR"
-			}
-			return categorie.Name
-		},
 	})
 	award.Meta(&admin.Meta{Name: "EditionID", Label: "Edition", Type: "select_one",
 		Config: &admin.SelectOneConfig{
@@ -182,15 +144,6 @@ func addAward(Admin *admin.Admin) {
 
 				return options
 			},
-		},
-		FormattedValuer: func(resource interface{}, context *qor.Context) (result interface{}) {
-			var edition model.Edition
-			if award, ok := resource.(*model.Award); ok {
-				context.GetDB().Find(&edition, award.EditionID)
-			} else {
-				return "ERROR"
-			}
-			return edition.Name
 		},
 	})
 }

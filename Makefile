@@ -1,14 +1,14 @@
 .PHONY: all
 all: rosalie
 
-.PHONY: rosalie
+.PHONY: rosalie admin resetdb
 
 rosalie:
-	go build -v rosalie/main.go
+	go build -v ./bin/rosalie.go
 admin:
-	go build -v admin/main.go
+	go build -v ./bin/admin.go
 resetdb:
-	go build -v admin/main.go
+	go build -v ./bin/resetdb.go
 
 .PHONY: rosalie-static
 rosalie-static: export CGO_ENABLED=0

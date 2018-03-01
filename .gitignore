@@ -1,4 +1,6 @@
-rosalie.exe
+*.exe
 ^rosalie$
+^admin$
+^resetdb$
 .env
 debug
