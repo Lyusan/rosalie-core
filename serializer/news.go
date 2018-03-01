@@ -9,9 +9,9 @@ type News struct {
 	ID              uint   `json:"id"`
 	Title           string `json:"title"`
 	Author          string `json:"author"`
-	ImgSrc          string `json:"imgSrc"`
-	PublicationDate string `json:"publicationDate"`
-	UpdatedDate     string `json:"updateDate"`
+	ImgSrc          string `json:"img_src"`
+	PublicationDate string `json:"publication_date"`
+	UpdatedDate     string `json:"update_date"`
 	Summary         string `json:"summary"`
 	Content         string `json:"content"`
 }

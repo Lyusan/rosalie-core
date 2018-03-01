@@ -9,8 +9,8 @@ type Article struct {
 	ID              uint   `json:"id"`
 	Title           string `json:"title"`
 	Content         string `json:"content"`
-	PublicationDate string `json:"publicationDate"`
-	UpdatedDate     string `json:"updateDate"`
+	PublicationDate string `json:"publication_date"`
+	UpdatedDate     string `json:"update_date"`
 }
 
 type ArticleSerializer struct {
