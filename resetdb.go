@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"../model"
-	"../utils"
+	"./model"
+	"./utils"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/joho/godotenv/autoload"

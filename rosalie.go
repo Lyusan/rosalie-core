@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"../routers"
-	"../utils"
+	"./routers"
+	"./utils"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"

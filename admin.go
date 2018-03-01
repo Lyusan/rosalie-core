@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	"../model"
-	"../utils"
+	"./model"
+	"./utils"
 
 	_ "github.com/jinzhu/gorm"
 	"github.com/qor/admin"
