@@ -19,7 +19,7 @@ func QuestionRegister(router *gin.RouterGroup) {
 }
 
 type QuestionsPOST struct {
-	Email     string     `json:"email"`
+	Email     string     `json:"mail"`
 	Token     string     `json:"token"`
 	Questions []Question `json:"questions"`
 }
