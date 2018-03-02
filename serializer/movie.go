@@ -8,8 +8,8 @@ import (
 type Movie struct {
 	ID          uint   `json:"id"`
 	Title       string `json:"title"`
-	Description string `json:"description"`
-	Image       string `json:"img_src"`
+	Description string `json:"desc"`
+	Image       string `json:"img"`
 	Date        string `json:"date"`
 }
 

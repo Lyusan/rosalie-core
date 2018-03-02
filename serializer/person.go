@@ -7,11 +7,11 @@ import (
 
 type Person struct {
 	ID          uint   `json:"id"`
-	FirstName   string `json:"first_name"`
-	LastName    string `json:"last_name"`
-	BirthDate   string `json:"birth_date"`
-	Description string `json:"description"`
-	ImgUrl      string `json:"image_url"`
+	FirstName   string `json:"firstname"`
+	LastName    string `json:"lastname"`
+	BirthDate   string `json:"birthdate"`
+	Description string `json:"desc"`
+	ImgUrl      string `json:"img"`
 }
 
 type PersonSerializer struct {
