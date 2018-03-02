@@ -52,7 +52,9 @@ func addAll(Admin *admin.Admin) {
 }
 
 func addApplication(Admin *admin.Admin) {
-	application := Admin.AddResource(&model.Application{})
+	application := Admin.AddResource(&model.Application{}, &admin.Config{
+		Permission: roles.Deny(roles.Create, roles.Anyone),
+	})
 	application.NewAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID", "AwardID")
 	application.ShowAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID", "AwardID")
 	application.EditAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID", "AwardID")
@@ -141,8 +143,8 @@ func addArticle(Admin *admin.Admin) {
 
 func addAward(Admin *admin.Admin) {
 	award := Admin.AddResource(&model.Award{})
-	award.NewAttrs("-Applications")
-	award.EditAttrs("-Applications")
+	// award.NewAttrs("-Applications")
+	// award.EditAttrs("-Applications")
 	award.Meta(&admin.Meta{Name: "CategorieID", Label: "Categorie", Type: "select_one",
 		Config: &admin.SelectOneConfig{
 			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
@@ -191,6 +193,43 @@ func addAward(Admin *admin.Admin) {
 				return "ERROR"
 			}
 			return edition.Name
+		},
+	})
+	applicationsMeta := award.Meta(&admin.Meta{Name: "Applications"})
+	applicationsResource := applicationsMeta.Resource
+
+	applicationsResource.EditAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID")
+	applicationsResource.NewAttrs("VotesNominees", "VotesWinner", "MovieID", "PersonID")
+	applicationsResource.Meta(&admin.Meta{Name: "MovieID", Label: "Movie", Type: "select_one",
+		Config: &admin.SelectOneConfig{
+			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
+				var movies []model.Movie
+				context.GetDB().Find(&movies)
+
+				for _, n := range movies {
+					idStr := fmt.Sprintf("%d", n.ID)
+					var option = []string{idStr, n.Title}
+					options = append(options, option)
+				}
+
+				return options
+			},
+		},
+	})
+	applicationsResource.Meta(&admin.Meta{Name: "PersonID", Label: "Person", Type: "select_one",
+		Config: &admin.SelectOneConfig{
+			Collection: func(_ interface{}, context *admin.Context) (options [][]string) {
+				var people []model.Person
+				context.GetDB().Find(&people)
+
+				for _, n := range people {
+					idStr := fmt.Sprintf("%d", n.ID)
+					var option = []string{idStr, n.GetFullName()}
+					options = append(options, option)
+				}
+
+				return options
+			},
 		},
 	})
 }
