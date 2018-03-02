@@ -124,7 +124,7 @@ func addApplication(Admin *admin.Admin) {
 		FormattedValuer: func(resource interface{}, context *qor.Context) (result interface{}) {
 			var award model.Award
 			if application, ok := resource.(*model.Application); ok {
-				context.GetDB().Find(&award, application.PersonID)
+				context.GetDB().Find(&award, application.CategorieID)
 			} else {
 				return "ERROR"
 			}
