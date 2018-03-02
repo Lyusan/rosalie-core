@@ -34,7 +34,7 @@ func main() {
 	if len(port) == 0 {
 		port = "9000"
 	}
-
+	log.Printf("Admin started on port: %s\n", port)
 	http.ListenAndServe(fmt.Sprintf(":%s", port), mux)
 }
 
