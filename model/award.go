@@ -50,8 +50,10 @@ func (s *Award) FindRelatedNominees() []Application {
 		})
 		index := 0
 		currentVoteNomineesValue := applications[index].VotesNominees
-		for ; index < len(applications) && (currentVoteNomineesValue == applications[index].VotesNominees || index < s.NumberNominees); index++ {
+		// TODO REFACTOR
+		for ; currentVoteNomineesValue > 0 && index < len(applications) && (currentVoteNomineesValue == applications[index].VotesNominees || index < s.NumberNominees); index++ {
 			nominees = append(nominees, applications[index])
+			currentVoteNomineesValue = applications[index].VotesNominees
 		}
 	}
 	return nominees
@@ -68,9 +70,11 @@ func (s *Award) FindRelatedWinner() []Application {
 			return applications[i].VotesWinner > applications[j].VotesWinner
 		})
 		index := 0
-		currentVoteNomineesValue := applications[index].VotesWinner
-		for ; index < len(applications) && currentVoteNomineesValue == applications[index].VotesWinner; index++ {
+		currentVoteWinnerValue := applications[index].VotesWinner
+		// TODO REFACTOR
+		for ; currentVoteWinnerValue > 0 && index < len(applications) && currentVoteWinnerValue == applications[index].VotesWinner; index++ {
 			winner = append(winner, applications[index])
+			currentVoteWinnerValue = applications[index].VotesWinner
 		}
 	}
 	return winner
