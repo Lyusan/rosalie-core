@@ -1,4 +1,4 @@
-# Rosalie [![pipeline status]][pipeline]
+# Rosalie
 
 The backend of the rosalie project, written in [golang].
 
